@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="resource monitor config">
+<sourcepath path=""/>
+<destpath path=""/>
+<svn>
+    <bin path =""/>
+    <params param=""/>
+</svn>
+<logs>
+    <errorlog path="/data1/filecenter/filecenter_error.log"/>
+    <logpath path="/data1/filecenter"/>
+    <redolog path="/data1/filecenter/filecenter_redo.log"/>
+</logs>
+</project>
