@@ -2,9 +2,10 @@ package com.zhuyanbin.app;
 
 import junit.framework.TestCase;
 
-public class ConfigTest extends TestCase {
-
+public class ConfigTest extends TestCase 
+{
 	private Config classRelection;
+	private String xmlFile = "src/test/resource/config.xml";
 	protected void setUp()
 	{
 		classRelection = new Config();
@@ -22,7 +23,7 @@ public class ConfigTest extends TestCase {
 		
 		try 
 		{
-			conf = new Config("src/test/resource/config.xml");
+			conf = new Config(xmlFile);
 			assertTrue(conf instanceof Config);
 		}
 		catch (SecurityException e) 
@@ -46,5 +47,29 @@ public class ConfigTest extends TestCase {
 		{
 			assertEquals("config xml file path can not be null.", ex.getMessage());
 		}
+		
+		try
+		{
+			classRelection.load(xmlFile);
+		}
+		catch(Exception ex)
+		{
+			fail("can not catch Exception " + ex.getMessage());
+		}
+		
+		try
+		{
+			classRelection = new Config(xmlFile);
+			classRelection.load();
+		}
+		catch(SecurityException ex)
+		{
+			fail("can not catch SecurityException " + ex.getMessage());
+		}
+		catch(Exception ex)
+		{
+			fail("can not catch Exception " + ex.getMessage());
+		}
+		
 	}
 }
