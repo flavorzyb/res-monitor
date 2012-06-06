@@ -9,34 +9,9 @@
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.build.resources.loc>${basedir}/src/main/resources</project.build.resources.loc>
-    <project.build.testResources.loc>${basedir}/src/test/resources</project.build.testResources.loc>
     <project.build.Libs.loc>${basedir}/Libs</project.build.Libs.loc>
   </properties>
-  <!--
-  <build>
-    <sourceDirectory>src/main/java</sourceDirectory>
-    <testSourceDirectory>src/test/java</testSourceDirectory>
-    <resources>
-        <resource>
-            <directory>${project.build.resources.loc}</directory>
-            <filtering>false</filtering>
-            <includes>
-                <include>config.xml</include>
-            </includes>
-        </resource>
-    </resources>
-    <testResources>
-        <testResource>
-            <directory>${project.build.testResources.loc}</directory>
-            <filtering>false</filtering>
-            <includes>
-                <include>config.xml</include>
-            </includes>
-        </testResource>
-    </testResources>
-  </build>
- -->
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
