@@ -25,7 +25,7 @@ public class Config
 		File fp = new File(xmlFile);
 		if (!fp.isFile())
 		{
-			throw new Exception("config xml file is not a normal file.");
+			throw new Exception("config xml file(" + fp.getAbsolutePath() +") is not a normal file.");
 		}
 		
 		_xmlFile = xmlFile;

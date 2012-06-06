@@ -22,13 +22,13 @@ public class ConfigTest extends TestCase {
 		
 		try 
 		{
-			conf = new Config("resource/config.xml");
+			conf = new Config("src/test/resource/config.xml");
 			assertTrue(conf instanceof Config);
 		}
 		catch (SecurityException e) 
 		{
 			fail(e.getMessage());
-		} 
+		}
 		catch (Exception e) 
 		{
 			fail(e.getMessage());
