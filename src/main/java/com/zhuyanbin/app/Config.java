@@ -1,14 +1,4 @@
 package com.zhuyanbin.app;
-import java.io.File;
-import java.io.IOException;
-import java.lang.Exception;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * 配置
@@ -17,36 +7,19 @@ import org.w3c.dom.NodeList;
  */
 public class Config 
 {
-	private String _xmlFile;
 	private String _sourcePath;
 	private String _destpath;
-	
+	private String _svnBinPath;
+	private String _svnParams;
+	private String _logPath;
+	private String _errorLogPath;
+	private String _redoLogPath;
+
 	public Config()
 	{
 	}
 	
-	public Config(String xmlFile) throws SecurityException, Exception
-	{
-		setXmlFilePath(xmlFile);
-	}
-	
-	private void setXmlFilePath(String xmlFile) throws SecurityException, Exception
-	{
-		File fp = new File(xmlFile);
-		if (!fp.isFile())
-		{
-			throw new Exception("config xml file(" + fp.getAbsolutePath() +") is not a normal file.");
-		}
-		
-		_xmlFile = xmlFile;
-	}
-	
-	private String getXmlFilePath()
-	{
-		return _xmlFile;
-	}
-	
-	private void setSourcePath(String path)
+	public void setSourcePath(String path)
 	{
 		_sourcePath = path;
 	}
@@ -56,7 +29,7 @@ public class Config
 		return _sourcePath;
 	}
 	
-	private void setDestPath(String path)
+	public void setDestPath(String path)
 	{
 		_destpath = path;
 	}
@@ -66,23 +39,53 @@ public class Config
 		return _destpath;
 	}
 	
-	public void load() throws SecurityException, IOException, Exception
+	public void setSvnBinPath(String path)
 	{
-		if (null == getXmlFilePath())
-		{
-			throw new Exception("config xml file path can not be null.");
-		}
-		
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder db = factory.newDocumentBuilder();
-		Document doc = db.parse(getXmlFilePath());
-		setSourcePath(doc.getElementsByTagName("sourcepath").item(0).getAttributes().getNamedItem("path").getNodeValue());
-		setDestPath(doc.getElementsByTagName("destpath").item(0).getAttributes().getNamedItem("path").getNodeValue());
+		_svnBinPath = path;
 	}
 	
-	public void load(String xmlFile) throws Exception
+	public String getSvnBinPath()
 	{
-		setXmlFilePath(xmlFile);
-		load();
+		return _svnBinPath;
+	}
+	
+	public void setSvnParams(String params)
+	{
+		_svnParams = params;
+	}
+	
+	public String getSvnParams()
+	{
+		return _svnParams;
+	}
+	
+	public void setLogPath(String logPath)
+	{
+		_logPath = logPath;
+	}
+	
+	public String getLogPath()
+	{
+		return _logPath;
+	}
+	
+	public String getErrorLogPath() 
+	{
+		return _errorLogPath;
+	}
+
+	public void setErrorLogPath(String errorLogPath) 
+	{
+		_errorLogPath = errorLogPath;
+	}
+
+	public String getRedoLogPath() 
+	{
+		return _redoLogPath;
+	}
+
+	public void setRedoLogPath(String redoLogPath) 
+	{
+		_redoLogPath = redoLogPath;
 	}
 }
