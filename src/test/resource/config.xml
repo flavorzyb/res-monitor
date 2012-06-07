@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="resource monitor config">
-<sourcepath path=""/>
-<destpath path=""/>
+<sourcepath path="src/main"/>
+<destpath path="src/test"/>
 <svn>
     <bin path =""/>
     <params param=""/>
