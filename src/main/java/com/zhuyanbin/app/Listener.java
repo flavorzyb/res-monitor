@@ -27,24 +27,20 @@ public class Listener implements JNotifyListener
         return _logFile;
     }
 
-    @Override
     public void fileRenamed(int wd, String rootPath, String oldName, String newName)
     {
         writeLog(rootPath, newName);
     }
 
-    @Override
     public void fileModified(int wd, String rootPath, String name)
     {
         writeLog(rootPath, name);
     }
 
-    @Override
     public void fileDeleted(int wd, String rootPath, String name)
     {
     }
 
-    @Override
     public void fileCreated(int wd, String rootPath, String name)
     {
         writeLog(rootPath, name);

@@ -18,6 +18,8 @@ public class App
 
         System.out.println("config file:" + configFile);
 
+        System.out.println("path:" + System.getProperty("java.library.path"));
+
         ConfigProxy proxy = new ConfigProxy();
         Config config = null;
 
