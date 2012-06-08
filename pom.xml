@@ -62,11 +62,11 @@
     </dependency>
     
     <dependency>
-     <groupId>org</groupId>
-     <artifactId>easymock</artifactId>
-     <version>3.1</version>
-     <scope>system</scope>
-     <systemPath>${project.build.Libs.loc}/easymock-3.1.jar</systemPath>
+      <groupId>org.easymock</groupId>
+      <artifactId>easymock</artifactId>
+      <version>3.1</version>
+      <scope>test</scope>
     </dependency>
+    
   </dependencies>
 </project>
