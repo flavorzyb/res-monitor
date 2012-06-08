@@ -1,5 +1,11 @@
 package com.zhuyanbin.app;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
+
 import net.contentobjects.jnotify.JNotifyListener;
 
 public class Listener implements JNotifyListener
@@ -24,33 +30,49 @@ public class Listener implements JNotifyListener
     @Override
     public void fileRenamed(int wd, String rootPath, String oldName, String newName)
     {
-        print("renamed " + rootPath + " : " + oldName + " -> " + newName);
+        writeLog(rootPath, newName);
     }
 
     @Override
     public void fileModified(int wd, String rootPath, String name)
     {
-        print("modified " + rootPath + " : " + name);
+        writeLog(rootPath, name);
     }
 
     @Override
     public void fileDeleted(int wd, String rootPath, String name)
     {
-        print("deleted " + rootPath + " : " + name);
     }
 
     @Override
     public void fileCreated(int wd, String rootPath, String name)
     {
-        print("created " + rootPath + " : " + name);
+        writeLog(rootPath, name);
     }
 
-    private void writeLog(String msg)
+    private void writeLog(String rootPath, String newName)
     {
-    }
-
-    void print(String msg)
-    {
-        System.err.println(msg);
+        try
+        {
+            Date dt = new Date();
+            Timestamp ts = new Timestamp(dt.getTime());
+            String msg = ts + "|" + rootPath + newName + "\n";
+            FileOutputStream fos = new FileOutputStream(getLogFile(), true);
+            fos.write(msg.getBytes());
+            fos.flush();
+            fos.close();
+        }
+        catch (FileNotFoundException ex)
+        {
+            System.out.println(ex.getMessage());
+        }
+        catch (SecurityException ex)
+        {
+            System.out.println(ex.getMessage());
+        }
+        catch (IOException ex)
+        {
+            System.out.println(ex.getMessage());
+        }
     }
 }
