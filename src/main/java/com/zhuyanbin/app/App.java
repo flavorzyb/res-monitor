@@ -1,6 +1,5 @@
 package com.zhuyanbin.app;
 
-import java.io.File;
 import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -15,25 +14,24 @@ public class App
 {
     public static void main( String[] args )
     {
-        if (args.length < 1)
-        {
-            System.out.println("need config file path.");
-            return;
-        }
+        String configFile = System.getProperty("user.config");
+
+        System.out.println("config file:" + configFile);
 
         ConfigProxy proxy = new ConfigProxy();
         Config config = null;
 
+        // 配置文件检测,检查是否正确
         try
         {
-            config = proxy.load(args[0]);
+            config = proxy.load(configFile);
 
-            checkPathIsDirectory(config.getSourcePath());
-            checkPathIsDirectory(config.getDestPath());
-            checkPathIsFile(config.getSvnBinPath());
-            checkPathcanExecute(config.getSvnBinPath());
+            FileChecker.checkPathIsDirectory(config.getSourcePath());
+            FileChecker.checkPathIsDirectory(config.getDestPath());
+            FileChecker.checkPathIsFile(config.getSvnBinPath());
+            FileChecker.checkPathcanExecute(config.getSvnBinPath());
 
-            checkPathIsDirectory(config.getLogPath());
+            FileChecker.checkPathIsDirectory(config.getLogPath());
         }
         catch (IOException ex)
         {
@@ -59,32 +57,7 @@ public class App
         {
             System.out.println(ex.getMessage());
         }
-    }
 
-    private static void checkPathIsDirectory(String path) throws NullPointerException, SecurityException, Exception
-    {
-        File fp = new File(path);
-        if (!fp.isDirectory())
-        {
-            throw new Exception(fp.getAbsolutePath() + " is not a Directory.");
-        }
-    }
-
-    private static void checkPathIsFile(String path) throws NullPointerException, SecurityException, Exception
-    {
-        File fp = new File(path);
-        if (!fp.isFile())
-        {
-            throw new Exception(fp.getAbsolutePath() + " is not a file.");
-        }
-    }
-
-    private static void checkPathcanExecute(String path) throws NullPointerException, SecurityException, Exception
-    {
-        File fp = new File(path);
-        if (!fp.canExecute())
-        {
-            throw new Exception(fp.getAbsolutePath() + " is not a file.");
-        }
+        // 启动监控文件进程
     }
 }
