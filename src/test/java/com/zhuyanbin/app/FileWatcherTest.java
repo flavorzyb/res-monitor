@@ -3,9 +3,9 @@ package com.zhuyanbin.app;
 import junit.framework.TestCase;
 import net.contentobjects.jnotify.JNotifyException;
 
-public class FileWatchTest extends TestCase
+public class FileWatcherTest extends TestCase
 {
-    private FileWatch classRelection;
+    private FileWatcher classRelection;
 
     private final String watchPath = "./";
     private final String logFile   = "logs/resource.log";
@@ -13,7 +13,7 @@ public class FileWatchTest extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        classRelection = new FileWatch(watchPath, logFile);
+        classRelection = new FileWatcher(watchPath, logFile);
     }
 
     @Override

@@ -3,7 +3,7 @@ package com.zhuyanbin.app;
 import net.contentobjects.jnotify.JNotify;
 import net.contentobjects.jnotify.JNotifyException;
 
-public class FileWatch
+public class FileWatcher
 {
     private static final int INVAILD_WATCH_ID = -1;
 
@@ -15,7 +15,7 @@ public class FileWatch
     
     private String           _logFile;
 
-    public FileWatch(String path, String logFile)
+    public FileWatcher(String path, String logFile)
     {
         setPath(path);
         setLogFile(logFile);

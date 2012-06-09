@@ -37,7 +37,7 @@ public class App
 
             // 启动监控文件进程
 
-            FileWatch fw = new FileWatch(config.getSourcePath(), config.getLogPath());
+            FileWatcher fw = new FileWatcher(config.getSourcePath(), config.getLogPath());
             fw.setWathSubtree(true);
             fw.addWatch();
 
