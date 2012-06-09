@@ -19,7 +19,14 @@ public class FileWatchTest extends TestCase
     @Override
     protected void tearDown() throws Exception
     {
-        classRelection.removeWatch();
+        try
+        {
+            classRelection.removeWatch();
+        }
+        catch (JNotifyException ex)
+        {
+            System.out.println(ex.getMessage());
+        }
         classRelection = null;
         super.tearDown();
     }
@@ -66,11 +73,10 @@ public class FileWatchTest extends TestCase
         try
         {
             classRelection.removeWatch();
-            fail("can not catch JNotifyException.");
         }
         catch (JNotifyException ex)
         {
-            assertTrue(ex instanceof JNotifyException);
+            fail(ex.getMessage());
         }
 
         try
@@ -78,7 +84,6 @@ public class FileWatchTest extends TestCase
             classRelection.addWatch();
             classRelection.removeWatch();
             classRelection.removeWatch();
-            fail("can not catch JNotifyException.");
         }
         catch (JNotifyException e)
         {
@@ -89,7 +94,6 @@ public class FileWatchTest extends TestCase
         {
             classRelection.addWatch();
             classRelection.addWatch();
-            fail("can not catch JNotifyException.");
         }
         catch (JNotifyException e)
         {

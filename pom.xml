@@ -9,7 +9,7 @@
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.build.Libs.loc>${basedir}/Libs</project.build.Libs.loc>
+		<project.build.Libs.loc>${basedir}/libs</project.build.Libs.loc>
 	</properties>
 
 	<build>

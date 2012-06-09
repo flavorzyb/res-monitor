@@ -63,6 +63,10 @@ public class FileWatch
 
     public void addWatch() throws JNotifyException
     {
+        if (INVAILD_WATCH_ID != getWatchId())
+        {
+            return;
+        }
         // watch mask, specify events you care about,
         // or JNotify.FILE_ANY for all events.
         int mask = JNotify.FILE_CREATED | JNotify.FILE_DELETED | JNotify.FILE_MODIFIED | JNotify.FILE_RENAMED;
