@@ -8,6 +8,7 @@
 </svn>
 <logs>
     <logpath path="/data1/resmonitor/resmonitor.log"/>
+    <doinglogpath path="/data1/resmonitor/resmonitor_doing.log"/>
     <redolog path="/data1/resmonitor/resmonitor_redo.log"/>
 </logs>
 </project>

@@ -68,4 +68,11 @@ public class ConfigTest extends TestCase
 		assertEquals(path, classRelection.getRedoLogPath());
 	}
 
+    public void testdoingLogPathIsMutable()
+    {
+        assertNull(classRelection.getDoingLogPath());
+        String path = "./";
+        classRelection.setDoingLogPath(path);
+        assertEquals(path, classRelection.getDoingLogPath());
+    }
 }

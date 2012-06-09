@@ -12,6 +12,7 @@ public class Config
 	private String _svnBinPath;
 	private String _svnParams;
 	private String _logPath;
+    private String _doingLogPath;
 	private String _redoLogPath;
 
 	public Config()
@@ -68,6 +69,16 @@ public class Config
 		return _logPath;
 	}
 	
+    public void setDoingLogPath(String logPath)
+    {
+        _doingLogPath = logPath;
+    }
+
+    public String getDoingLogPath()
+    {
+        return _doingLogPath;
+    }
+
 	public String getRedoLogPath() 
 	{
 		return _redoLogPath;

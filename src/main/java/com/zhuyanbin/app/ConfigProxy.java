@@ -65,6 +65,10 @@ public class ConfigProxy
             {
                 result.setLogPath(nl.item(i).getAttributes().getNamedItem("path").getNodeValue());
             }
+            else if ("doinglogpath" == name)
+            {
+                result.setDoingLogPath(nl.item(i).getAttributes().getNamedItem("path").getNodeValue());
+            }
             else if ("redolog" == name)
             {
                 result.setRedoLogPath(nl.item(i).getAttributes().getNamedItem("path").getNodeValue());

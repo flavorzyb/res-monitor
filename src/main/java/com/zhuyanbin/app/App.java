@@ -35,8 +35,11 @@ public class App
             FileChecker.checkPathIsFile(config.getSvnBinPath());
             FileChecker.checkPathcanExecute(config.getSvnBinPath());
 
-            // 启动监控文件进程
+            // 启动同步处理进程
 
+            // 启动redo同步处理进程
+
+            // 启动监控文件进程
             FileWatcher fw = new FileWatcher(config.getSourcePath(), config.getLogPath());
             fw.setWathSubtree(true);
             fw.addWatch();

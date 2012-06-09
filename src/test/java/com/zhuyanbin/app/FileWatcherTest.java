@@ -1,11 +1,13 @@
 package com.zhuyanbin.app;
 
 import junit.framework.TestCase;
+import net.contentobjects.jnotify.JNotify;
 import net.contentobjects.jnotify.JNotifyException;
 
 public class FileWatcherTest extends TestCase
 {
     private FileWatcher classRelection;
+    private JNotify      mock;
 
     private final String watchPath = "./";
     private final String logFile   = "logs/resource.log";
@@ -51,7 +53,9 @@ public class FileWatcherTest extends TestCase
     {
         try
         {
+            assertTrue(classRelection.getWatchId() < 0);
             classRelection.addWatch();
+            assertTrue(classRelection.getWatchId() > -1);
         }
         catch (JNotifyException e)
         {
@@ -61,6 +65,7 @@ public class FileWatcherTest extends TestCase
         try
         {
             assertTrue(classRelection.removeWatch());
+            assertTrue(classRelection.getWatchId() < 0);
         }
         catch (JNotifyException ex)
         {
@@ -73,6 +78,7 @@ public class FileWatcherTest extends TestCase
         try
         {
             classRelection.removeWatch();
+            assertTrue(classRelection.getWatchId() < 0);
         }
         catch (JNotifyException ex)
         {
@@ -84,6 +90,7 @@ public class FileWatcherTest extends TestCase
             classRelection.addWatch();
             classRelection.removeWatch();
             classRelection.removeWatch();
+            assertTrue(classRelection.getWatchId() < 0);
         }
         catch (JNotifyException e)
         {
@@ -93,7 +100,10 @@ public class FileWatcherTest extends TestCase
         try
         {
             classRelection.addWatch();
+            int id = classRelection.getWatchId();
+            assertTrue(classRelection.getWatchId() > -1);
             classRelection.addWatch();
+            assertTrue(classRelection.getWatchId() == id);
         }
         catch (JNotifyException e)
         {
