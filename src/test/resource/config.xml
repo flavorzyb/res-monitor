@@ -7,8 +7,7 @@
     <params param="--username xxxx --password ddddd"/>
 </svn>
 <logs>
-    <logpath path="/data1/resmonitor"/>
-    <errorlog path="/data1/resmonitor/resmonitor_error.log"/>
+    <logpath path="/data1/resmonitor/resmonitor.log"/>
     <redolog path="/data1/resmonitor/resmonitor_redo.log"/>
 </logs>
 </project>

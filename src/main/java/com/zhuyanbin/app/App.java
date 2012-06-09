@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import net.contentobjects.jnotify.JNotifyException;
+
 import org.xml.sax.SAXException;
 
 /**
@@ -33,7 +35,20 @@ public class App
             FileChecker.checkPathIsFile(config.getSvnBinPath());
             FileChecker.checkPathcanExecute(config.getSvnBinPath());
 
-            FileChecker.checkPathIsDirectory(config.getLogPath());
+            // 启动监控文件进程
+
+            FileWatch fw = new FileWatch(config.getSourcePath(), config.getLogPath());
+            fw.setWathSubtree(true);
+            fw.addWatch();
+
+            while (true)
+            {
+                Thread.sleep(10000);
+            }
+        }
+        catch (JNotifyException ex)
+        {
+            System.out.println(ex.getMessage());
         }
         catch (IOException ex)
         {
@@ -59,7 +74,5 @@ public class App
         {
             System.out.println(ex.getMessage());
         }
-
-        // 启动监控文件进程
     }
 }

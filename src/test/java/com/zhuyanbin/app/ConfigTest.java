@@ -6,13 +6,15 @@ public class ConfigTest extends TestCase
 {
 	private Config classRelection;
 	
-	protected void setUp() throws Exception 
+	@Override
+    protected void setUp() throws Exception 
 	{
 		super.setUp();
 		classRelection = new Config();
 	}
 
-	protected void tearDown() throws Exception 
+	@Override
+    protected void tearDown() throws Exception 
 	{
 		classRelection = null;
 		super.tearDown();
@@ -56,14 +58,6 @@ public class ConfigTest extends TestCase
 		String path = "./";
 		classRelection.setLogPath(path);
 		assertEquals(path, classRelection.getLogPath());
-	}
-
-	public void testErrorLogPathIsMutable() 
-	{
-		assertNull(classRelection.getErrorLogPath());
-		String path = "./";
-		classRelection.setErrorLogPath(path);
-		assertEquals(path, classRelection.getErrorLogPath());
 	}
 
 	public void testRedoLogPathIsMutable() 

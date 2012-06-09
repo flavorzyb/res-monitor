@@ -12,7 +12,6 @@ public class Config
 	private String _svnBinPath;
 	private String _svnParams;
 	private String _logPath;
-	private String _errorLogPath;
 	private String _redoLogPath;
 
 	public Config()
@@ -69,16 +68,6 @@ public class Config
 		return _logPath;
 	}
 	
-	public String getErrorLogPath() 
-	{
-		return _errorLogPath;
-	}
-
-	public void setErrorLogPath(String errorLogPath) 
-	{
-		_errorLogPath = errorLogPath;
-	}
-
 	public String getRedoLogPath() 
 	{
 		return _redoLogPath;
