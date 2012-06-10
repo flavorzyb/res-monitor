@@ -36,8 +36,12 @@ public class App
             FileChecker.checkPathcanExecute(config.getSvnBinPath());
 
             // 启动同步处理进程
+            FileLogWorker flw = new FileLogWorker(config.getLogPath(), config.getDoingLogPath(), config.getRedoLogPath());
+            flw.start();
 
             // 启动redo同步处理进程
+            FileRedoWorker frw = new FileRedoWorker(config.getRedoLogPath(), config.getLogPath());
+            frw.start();
 
             // 启动监控文件进程
             FileWatcher fw = new FileWatcher(config.getSourcePath(), config.getLogPath());

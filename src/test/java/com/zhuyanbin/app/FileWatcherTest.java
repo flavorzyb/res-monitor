@@ -1,13 +1,12 @@
 package com.zhuyanbin.app;
 
 import junit.framework.TestCase;
-import net.contentobjects.jnotify.JNotify;
 import net.contentobjects.jnotify.JNotifyException;
 
 public class FileWatcherTest extends TestCase
 {
     private FileWatcher classRelection;
-    private JNotify      mock;
+    // private JNotify mock;
 
     private final String watchPath = "./";
     private final String logFile   = "logs/resource.log";
