@@ -45,13 +45,13 @@ public class ConfigProxy
         for (int i = 0; i < len; i++)
         {
             name = nl.item(i).getNodeName();
-            if ("bin" == name)
+            if ("username" == name)
             {
-                result.setSvnBinPath(nl.item(i).getAttributes().getNamedItem("path").getNodeValue());
+                result.setUserName(nl.item(i).getAttributes().getNamedItem("param").getNodeValue());
             }
-            else if ("params" == name)
+            else if ("password" == name)
             {
-                result.setSvnParams(nl.item(i).getAttributes().getNamedItem("param").getNodeValue());
+                result.setPassword(nl.item(i).getAttributes().getNamedItem("param").getNodeValue());
             }
         }
 
@@ -69,9 +69,9 @@ public class ConfigProxy
             {
                 result.setDoingLogPath(nl.item(i).getAttributes().getNamedItem("path").getNodeValue());
             }
-            else if ("redolog" == name)
+            else if ("errorlog" == name)
             {
-                result.setRedoLogPath(nl.item(i).getAttributes().getNamedItem("path").getNodeValue());
+                result.setErrorLogPath(nl.item(i).getAttributes().getNamedItem("path").getNodeValue());
             }
         }
 

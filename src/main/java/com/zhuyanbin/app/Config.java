@@ -9,11 +9,11 @@ public class Config
 {
 	private String _sourcePath;
 	private String _destpath;
-	private String _svnBinPath;
-	private String _svnParams;
+	private String _userName;
+	private String _password;
 	private String _logPath;
     private String _doingLogPath;
-	private String _redoLogPath;
+	private String _errorLogPath;
 
 	public Config()
 	{
@@ -39,24 +39,24 @@ public class Config
 		return _destpath;
 	}
 	
-	public void setSvnBinPath(String path)
+    public void setUserName(String username)
 	{
-		_svnBinPath = path;
+        _userName = username;
 	}
 	
-	public String getSvnBinPath()
+	public String getUserName()
 	{
-		return _svnBinPath;
+		return _userName;
 	}
 	
-	public void setSvnParams(String params)
+    public void setPassword(String password)
 	{
-		_svnParams = params;
+        _password = password;
 	}
 	
-	public String getSvnParams()
+	public String getPassword()
 	{
-		return _svnParams;
+		return _password;
 	}
 	
 	public void setLogPath(String logPath)
@@ -79,13 +79,13 @@ public class Config
         return _doingLogPath;
     }
 
-	public String getRedoLogPath() 
+	public String getErrorLogPath() 
 	{
-		return _redoLogPath;
+		return _errorLogPath;
 	}
 
-	public void setRedoLogPath(String redoLogPath) 
+	public void setErrorLogPath(String redoLogPath) 
 	{
-		_redoLogPath = redoLogPath;
+		_errorLogPath = redoLogPath;
 	}
 }

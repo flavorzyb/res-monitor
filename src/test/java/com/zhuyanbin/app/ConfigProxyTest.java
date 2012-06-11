@@ -136,19 +136,19 @@ public class ConfigProxyTest extends TestCase
         Config result = new Config();
         result.setSourcePath("src/main");
         result.setDestPath("src/test");
-        result.setSvnBinPath("/usr/bin/svn");
-        result.setSvnParams("--username xxxx --password ddddd");
+        result.setUserName("test");
+        result.setPassword("password");
         result.setLogPath("/data1/resmonitor/resmonitor.log");
         result.setDoingLogPath("/data1/resmonitor/resmonitor_doing.log");
-        result.setRedoLogPath("/data1/resmonitor/resmonitor_redo.log");
+        result.setErrorLogPath("/data1/resmonitor/resmonitor_error.log");
 
         assertEquals(result.getSourcePath(), conf.getSourcePath());
         assertEquals(result.getDestPath(), conf.getDestPath());
-        assertEquals(result.getSvnBinPath(), conf.getSvnBinPath());
+        assertEquals(result.getUserName(), conf.getUserName());
 
-        assertEquals(result.getSvnParams(), conf.getSvnParams());
+        assertEquals(result.getPassword(), conf.getPassword());
         assertEquals(result.getLogPath(), conf.getLogPath());
         assertEquals(result.getDoingLogPath(), conf.getDoingLogPath());
-        assertEquals(result.getRedoLogPath(), conf.getRedoLogPath());
+        assertEquals(result.getErrorLogPath(), conf.getErrorLogPath());
     }
 }

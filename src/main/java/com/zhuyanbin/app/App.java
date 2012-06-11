@@ -32,16 +32,12 @@ public class App
 
             FileChecker.checkPathIsDirectory(config.getSourcePath());
             FileChecker.checkPathIsDirectory(config.getDestPath());
-            FileChecker.checkPathIsFile(config.getSvnBinPath());
-            FileChecker.checkPathcanExecute(config.getSvnBinPath());
+            FileChecker.checkPathIsFile(config.getUserName());
+            FileChecker.checkPathcanExecute(config.getUserName());
 
             // 启动同步处理进程
-            FileLogWorker flw = new FileLogWorker(config.getLogPath(), config.getDoingLogPath(), config.getRedoLogPath());
+            FileLogWorker flw = new FileLogWorker(config.getLogPath(), config.getDoingLogPath(), config.getErrorLogPath());
             flw.start();
-
-            // 启动redo同步处理进程
-            FileRedoWorker frw = new FileRedoWorker(config.getRedoLogPath(), config.getLogPath());
-            frw.start();
 
             // 启动监控文件进程
             FileWatcher fw = new FileWatcher(config.getSourcePath(), config.getLogPath());

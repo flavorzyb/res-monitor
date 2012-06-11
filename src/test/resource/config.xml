@@ -3,12 +3,12 @@
 <sourcepath path="src/main"/>
 <destpath path="src/test"/>
 <svn>
-    <bin path ="/usr/bin/svn"/>
-    <params param="--username xxxx --password ddddd"/>
+    <username param="test"/>
+    <password param="password"/>
 </svn>
 <logs>
     <logpath path="/data1/resmonitor/resmonitor.log"/>
     <doinglogpath path="/data1/resmonitor/resmonitor_doing.log"/>
-    <redolog path="/data1/resmonitor/resmonitor_redo.log"/>
+    <errorlog path="/data1/resmonitor/resmonitor_error.log"/>
 </logs>
 </project>

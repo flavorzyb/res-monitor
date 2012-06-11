@@ -36,20 +36,20 @@ public class ConfigTest extends TestCase
 		assertEquals(path, classRelection.getDestPath());
 	}
 
-	public void testSvnBinPathIsMutable() 
+    public void testUserNameIsMutable()
 	{
-		assertNull(classRelection.getSvnBinPath());
-		String path = "./";
-		classRelection.setSvnBinPath(path);
-		assertEquals(path, classRelection.getSvnBinPath());
+		assertNull(classRelection.getUserName());
+        String username = "xxxddd";
+        classRelection.setUserName(username);
+        assertEquals(username, classRelection.getUserName());
 	}
 
-	public void testSvnParamsIsMutable() 
+    public void testPasswordIsMutable()
 	{
-		assertNull(classRelection.getSvnParams());
-		String params = "--username xxxx --passwordxxxxx";
-		classRelection.setSvnParams(params);
-		assertEquals(params, classRelection.getSvnParams());
+		assertNull(classRelection.getPassword());
+        String password = "sswordxxxxx";
+        classRelection.setPassword(password);
+        assertEquals(password, classRelection.getPassword());
 	}
 
 	public void testLogPathIsMutable() 
@@ -60,15 +60,15 @@ public class ConfigTest extends TestCase
 		assertEquals(path, classRelection.getLogPath());
 	}
 
-	public void testRedoLogPathIsMutable() 
+    public void testErrorLogPathIsMutable()
 	{
-		assertNull(classRelection.getRedoLogPath());
+		assertNull(classRelection.getErrorLogPath());
 		String path = "./";
-		classRelection.setRedoLogPath(path);
-		assertEquals(path, classRelection.getRedoLogPath());
+		classRelection.setErrorLogPath(path);
+		assertEquals(path, classRelection.getErrorLogPath());
 	}
 
-    public void testdoingLogPathIsMutable()
+    public void testDoingLogPathIsMutable()
     {
         assertNull(classRelection.getDoingLogPath());
         String path = "./";
