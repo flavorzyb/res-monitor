@@ -203,57 +203,34 @@ public class SvnWorker
         }
     }
 
-    public boolean update(String sourcePath, String filePath)
+    public boolean update(String sourcePath, String filePath) throws SVNException, NullPointerException, IOException, SecurityException, NoSuchAlgorithmException
     {
         boolean result = false;
-        try
+        // 先更新整个svn仓库
+        doUpdate();
+
+        // 重置svn操作列表
+        resetSvnItemQueue();
+
+        // 将文件(目录)拷贝到workcopy
+        addFile2SVN(sourcePath, filePath);
+
+        // 添加svn事件
+        String filePaths[] = new String[_item.size()];
+        int i = 0;
+        for (SvnItem si : _item)
         {
-            // 先更新整个svn仓库
-            doUpdate();
-    
-            // 重置svn操作列表
-            resetSvnItemQueue();
-
-            // 将文件(目录)拷贝到workcopy
-            addFile2SVN(sourcePath, filePath);
-
-            // 添加svn事件
-            String filePaths[] = new String[_item.size()];
-            int i = 0;
-            for (SvnItem si : _item)
+            if (si.isAdd())
             {
-                if (si.isAdd())
-                {
-                    doAdd(si.getPath(), si.isFile());
-                }
-                
-                filePaths[i] = si.getPath();
-                i++;
+                doAdd(si.getPath(), si.isFile());
             }
 
-            doCommit(filePaths);
+            filePaths[i] = si.getPath();
+            i++;
         }
-        catch (SVNException ex)
-        {
-            System.out.println(ex.getMessage());
-        }
-        catch (NullPointerException ex)
-        {
-            System.out.println(ex.getMessage());
-        }
-        catch (IOException ex)
-        {
-            System.out.println(ex.getMessage());
-        }
-        catch (SecurityException ex)
-        {
-            System.out.println(ex.getMessage());
-        }
-        catch (NoSuchAlgorithmException ex)
-        {
-            System.out.println(ex.getMessage());
-        }
-        
+
+        result = doCommit(filePaths);
+
         return result;
     }
 

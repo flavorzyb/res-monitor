@@ -1,6 +1,11 @@
 package com.zhuyanbin.app;
 
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+
 import junit.framework.TestCase;
+
+import org.tmatesoft.svn.core.SVNException;
 
 public class SvnWorkerTest extends TestCase
 {
@@ -31,19 +36,13 @@ public class SvnWorkerTest extends TestCase
         assertEquals(password, classRelection.getPassword());
     }
 
-    public void testUpdate()
+    public void testUpdate() throws SVNException, NullPointerException, IOException, SecurityException, NoSuchAlgorithmException
     {
         classRelection.update("/Users/flavor/resource/svn_work.bak", "tmp/ppp/tt.txt");
-        System.out.println();
         classRelection.update("/Users/flavor/resource/svn_work.bak", "ppp.txt");
-        System.out.println();
         classRelection.update("/Users/flavor/resource/svn_work.bak", "bbb/psp.txt");
-        System.out.println();
         classRelection.update("/Users/flavor/resource/svn_work.bak", "ppp/999");
-        System.out.println();
         classRelection.update("/Users/flavor/resource/svn_work.bak", "tt.txt");
-        System.out.println();
         classRelection.update("/Users/flavor/resource/svn_work.bak", "888");
-        System.out.println();
     }
 }

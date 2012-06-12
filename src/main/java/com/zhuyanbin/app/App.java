@@ -32,8 +32,8 @@ public class App
 
             FileChecker.checkPathIsDirectory(config.getSourcePath());
             FileChecker.checkPathIsDirectory(config.getDestPath());
-            FileChecker.checkPathIsFile(config.getUserName());
-            FileChecker.checkPathcanExecute(config.getUserName());
+
+            ErrorLog.getInstance().setLogPath(config.getErrorLogPath());
 
             // 启动同步处理进程
             FileLogWorker flw = new FileLogWorker(config.getLogPath(), config.getDoingLogPath(), config.getErrorLogPath());
