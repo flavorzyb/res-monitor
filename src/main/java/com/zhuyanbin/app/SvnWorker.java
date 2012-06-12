@@ -103,9 +103,22 @@ public class SvnWorker
         getSVNClientManager().getUpdateClient().doUpdate(new File(getRootPath()), SVNRevision.HEAD, SVNDepth.INFINITY, true, true);
     }
 
-    private boolean doCommit(String filePath) throws SVNException, NullPointerException
+    private boolean doCommit(String[] filePaths) throws SVNException, NullPointerException
     {
-        File[] files = { new File(filePath) };
+        File[] files;
+
+        if (null == filePaths)
+        {
+            return false;
+        }
+
+        int len = filePaths.length;
+        files = new File[len];
+        for (int i = 0; i < len; i++)
+        {
+            files[i] = new File(filePaths[i]);
+        }
+
         String[] changelist = { "" };
         SVNCommitInfo sci = getSVNClientManager().getCommitClient().doCommit(files, false, "auto commit by system", null, changelist, true, true, SVNDepth.INFINITY);
         return (sci.getNewRevision() > 0);
@@ -189,11 +202,20 @@ public class SvnWorker
             addFile2SVN(sourcePath, filePath);
 
             // 添加svn事件
-            System.out.println("size:" + _item.size());
+            String filePaths[] = new String[_item.size()];
+            int i = 0;
             for (SvnItem si : _item)
             {
-                System.out.println("path:" + si.getPath() + ", isadd:" + si.isAdd() + ", isFile:" + si.isFile());
+                if (si.isAdd())
+                {
+                    doAdd(si.getPath(), si.isFile());
+                }
+                
+                filePaths[i] = si.getPath();
+                i++;
             }
+
+            doCommit(filePaths);
         }
         catch (SVNException ex)
         {
@@ -215,7 +237,7 @@ public class SvnWorker
         return result;
     }
 
-    private void copyFile(String sourcePath, String filePath) throws NullPointerException, IOException, SecurityException
+    protected void copyFile(String sourcePath, String filePath) throws NullPointerException, IOException, SecurityException
     {
         FileInputStream sourceFis = new FileInputStream(new File(sourcePath + "/" + filePath));
         BufferedInputStream sourceBis = new BufferedInputStream(sourceFis);
