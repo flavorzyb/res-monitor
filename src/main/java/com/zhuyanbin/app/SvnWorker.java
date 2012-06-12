@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Vector;
 
 import org.tmatesoft.svn.core.SVNCommitInfo;
@@ -119,8 +120,9 @@ public class SvnWorker
             files[i] = new File(filePaths[i]);
         }
 
-        String[] changelist = { "" };
+        String[] changelist = {};
         SVNCommitInfo sci = getSVNClientManager().getCommitClient().doCommit(files, false, "auto commit by system", null, changelist, true, true, SVNDepth.INFINITY);
+
         return (sci.getNewRevision() > 0);
     }
 
@@ -135,7 +137,7 @@ public class SvnWorker
         getSVNClientManager().getWCClient().doAdd(new File(filePath), force, mkdir, climbUnversionedParents, SVNDepth.INFINITY, includeIgnored, makeParents);
     }
 
-    private void addFile2SVN(String sourcePath, String filePath) throws NullPointerException, SecurityException, IOException, SVNException
+    private void addFile2SVN(String sourcePath, String filePath) throws NullPointerException, SecurityException, IOException, SVNException, NoSuchAlgorithmException
     {
         String fullPath = getRootPath() + "/" + filePath;
         File fp = new File(fullPath);
@@ -147,8 +149,11 @@ public class SvnWorker
             {
                 if (isFile(sourcePath, filePath))
                 {
-                    copyFile(sourcePath, filePath);
-                    _item.add(new SvnItem(fullPath, true, true));
+                    if (!Md5CheckSum.md5StringIsSame(sourcePath + "/" + filePath, fullPath))
+                    {
+                        copyFile(sourcePath, filePath);
+                        _item.add(new SvnItem(fullPath, true, true));
+                    }
                 }
                 else
                 {
@@ -162,7 +167,18 @@ public class SvnWorker
                 addFile2SVN(sourcePath, parentPath);
                 pfp.mkdir();
                 boolean isFile = isFile(sourcePath, filePath);
-                _item.add(new SvnItem(fullPath, true, isFile));
+                if (isFile)
+                {
+                    if (!Md5CheckSum.md5StringIsSame(sourcePath + "/" + filePath, fullPath))
+                    {
+                        copyFile(sourcePath, filePath);
+                        _item.add(new SvnItem(fullPath, true, isFile));
+                    }
+                }
+                else
+                {
+                    _item.add(new SvnItem(fullPath, true, isFile));
+                }
             }
         }
         else
@@ -170,7 +186,7 @@ public class SvnWorker
             if (fp.isFile())
             {
                 copyFile(sourcePath, filePath);
-                _item.add(new SvnItem(fullPath + "_4", false, true));
+                _item.add(new SvnItem(fullPath, false, true));
             }
         }
     }
@@ -230,6 +246,10 @@ public class SvnWorker
             System.out.println(ex.getMessage());
         }
         catch (SecurityException ex)
+        {
+            System.out.println(ex.getMessage());
+        }
+        catch (NoSuchAlgorithmException ex)
         {
             System.out.println(ex.getMessage());
         }

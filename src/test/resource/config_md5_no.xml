@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="resource monitor config">
+<sourcepath path="src/main"/>
+<destpath path="src/test"/>
+<svn>
+    <username param="testdd"/>
+    <password param="passwordss"/>
+</svn>
+<logs>
+    <logpath path="/data1/resmonitor/resmonitor.log"/>
+    <doinglogpath path="/data1/resmonitor/resmonitor_doing.log"/>
+    <errorlog path="/data1/resmonitor/resmonitor_error.log"/>
+</logs>
+</project>

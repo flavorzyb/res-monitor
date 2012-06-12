@@ -1,5 +1,6 @@
 package com.zhuyanbin.app;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.MappedByteBuffer;
@@ -11,27 +12,31 @@ import java.security.NoSuchAlgorithmException;
 public class Md5CheckSum
 {
     protected static char          hexDigits[]   = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
-    protected static MessageDigest messageDigest = null;
-    static
+    protected static MessageDigest _messageDigest = null;
+
+    private static MessageDigest getMessageDigest() throws NoSuchAlgorithmException
     {
-        try
+        if (null == _messageDigest)
         {
-            messageDigest = MessageDigest.getInstance("MD5");
+            _messageDigest = MessageDigest.getInstance("MD5");
         }
-        catch (NoSuchAlgorithmException e)
-        {
-            System.err.println(Md5CheckSum.class.getName() + "初始化失败，MessageDigest不支持MD5Util.");
-            e.printStackTrace();
-        }
+
+        return _messageDigest;
     }
 
-    public static String getFileMd5(String filePath) throws IOException
+    public static String getFileMd5(String filePath) throws IOException, NoSuchAlgorithmException
     {
-        FileInputStream in = new FileInputStream(filePath);
+        File fp = new File(filePath);
+        FileInputStream in = new FileInputStream(fp);
         FileChannel ch = in.getChannel();
-        MappedByteBuffer byteBuffer = ch.map(FileChannel.MapMode.READ_ONLY, 0, filePath.length());
-        messageDigest.update(byteBuffer);
-        return bufferToHex(messageDigest.digest());
+        MappedByteBuffer byteBuffer = ch.map(FileChannel.MapMode.READ_ONLY, 0, fp.length());
+        getMessageDigest().update(byteBuffer);
+        return bufferToHex(getMessageDigest().digest());
+    }
+
+    public static boolean md5StringIsSame(String sourceFilePath, String destFilePath) throws IOException, NoSuchAlgorithmException
+    {
+        return (getFileMd5(sourceFilePath).equals(getFileMd5(destFilePath)));
     }
 
     private static String bufferToHex(byte bytes[])
