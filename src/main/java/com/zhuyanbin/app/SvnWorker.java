@@ -175,6 +175,11 @@ public class SvnWorker
         addFile2SVN(sourcePath, filePath);
 
         // 添加svn事件
+        if (_item.size() < 1)
+        {
+            return result;
+        }
+
         String filePaths[] = new String[_item.size()];
         int i = 0;
         for (SvnItem si : _item)
