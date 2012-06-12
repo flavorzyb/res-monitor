@@ -1,12 +1,14 @@
 package com.zhuyanbin.app;
 
+import java.io.File;
+
 import junit.framework.TestCase;
 
 public class ListenerTest extends TestCase
 {
 
     private Listener classRelection;
-    private final String logFile = "logs/resource.log";
+    private final String logFile = "src/test/logs/resource.log";
     @Override
     protected void setUp() throws Exception
     {
@@ -18,7 +20,17 @@ public class ListenerTest extends TestCase
     protected void tearDown() throws Exception
     {
         classRelection = null;
+        cleanUp();
         super.tearDown();
+    }
+
+    private void cleanUp()
+    {
+        File fp = new File(logFile);
+        if (fp.exists())
+        {
+            fp.delete();
+        }
     }
 
     public void testGetLogPath()

@@ -7,15 +7,21 @@ import java.io.InputStreamReader;
 
 public class FileLogWorker extends Thread
 {
-    private String _logPath;
-    private String _redoLogPath;
-    private String _doingLogPath;
+    private final static int STATUS_IS_DOING = 0;
 
-    public FileLogWorker(String logPath, String doingLogPath, String redoLogPath)
+    private final static int STATUS_IS_SLEEP = 1;
+
+    private String   _logPath;
+    private String   _doingLogPath;
+    private ErrorLog _errorLog;
+    private boolean  _isLoop = true;
+    private int              _status         = STATUS_IS_SLEEP;
+
+    public FileLogWorker(String logPath, String doingLogPath, ErrorLog errorLog)
     {
         setLogPath(logPath);
-        setRedoLogPath(redoLogPath);
         setDoingLogPath(doingLogPath);
+        setErrorLog(errorLog);
     }
 
     private void setLogPath(String logPath)
@@ -38,41 +44,75 @@ public class FileLogWorker extends Thread
         return _doingLogPath;
     }
 
-    private void setRedoLogPath(String logPath)
+    private void setErrorLog(ErrorLog errorLog)
     {
-        _redoLogPath = logPath;
+        _errorLog = errorLog;
     }
 
-    public String getRedoLogPath()
+    public ErrorLog getErrorLog()
     {
-        return _redoLogPath;
+        return _errorLog;
+    }
+
+    private void setStatus(int status)
+    {
+        switch (status)
+        {
+            case STATUS_IS_DOING:
+            case STATUS_IS_SLEEP:
+                break;
+            default:
+                status = getStatus();
+        }
+
+        _status = status;
+    }
+
+    public int getStatus()
+    {
+        return _status;
     }
 
     @Override
-    public void start() throws IllegalThreadStateException
+    public void run() throws IllegalThreadStateException
     {
-        while (true)
+        while (isLoop())
         {
             try
             {
                 if (renameLogPath())
                 {
+                    setStatus(STATUS_IS_DOING);
                     BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(getDoingLogPath())));
                     String buf = null;
                     while (null != (buf = br.readLine()))
                     {
                         System.out.println(buf);
                     }
+
+                    deleteDoingLog();
                 }
                 else
                 {
-                    Thread.sleep(1000);
+                    setStatus(STATUS_IS_SLEEP);
+                    sleep(1000);
                 }
             }
             catch (Exception ex)
             {
+                getErrorLog().write(ex.getMessage());
             }
         }
+    }
+
+    public void setIsLoop(boolean isLoop)
+    {
+        _isLoop = isLoop;
+    }
+
+    public boolean isLoop()
+    {
+        return _isLoop;
     }
 
     private boolean renameLogPath() throws NullPointerException, SecurityException
@@ -92,5 +132,19 @@ public class FileLogWorker extends Thread
         }
 
         return result;
+    }
+
+    private void deleteDoingLog() throws NullPointerException, SecurityException
+    {
+        File fp = new File(getDoingLogPath());
+        if (fp.exists())
+        {
+            fp.delete();
+        }
+    }
+
+    public boolean isSleep()
+    {
+        return (getStatus() == STATUS_IS_SLEEP);
     }
 }

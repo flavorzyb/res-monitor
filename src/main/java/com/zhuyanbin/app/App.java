@@ -1,12 +1,5 @@
 package com.zhuyanbin.app;
 
-import java.io.IOException;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import net.contentobjects.jnotify.JNotifyException;
-
-import org.xml.sax.SAXException;
 
 /**
  * Hello world!
@@ -36,7 +29,7 @@ public class App
             ErrorLog.getInstance().setLogPath(config.getErrorLogPath());
 
             // 启动同步处理进程
-            FileLogWorker flw = new FileLogWorker(config.getLogPath(), config.getDoingLogPath(), config.getErrorLogPath());
+            FileLogWorker flw = new FileLogWorker(config.getLogPath(), config.getDoingLogPath(), ErrorLog.getInstance());
             flw.start();
 
             // 启动监控文件进程
@@ -49,33 +42,9 @@ public class App
                 Thread.sleep(10000);
             }
         }
-        catch (JNotifyException ex)
-        {
-            System.out.println(ex.getMessage());
-        }
-        catch (IOException ex)
-        {
-            System.out.println(ex.getMessage());
-        }
-        catch (IllegalArgumentException ex)
-        {
-            System.out.println(ex.getMessage());
-        }
-        catch (ParserConfigurationException ex)
-        {
-            System.out.println(ex.getMessage());
-        }
-        catch (SAXException ex)
-        {
-            System.out.println(ex.getMessage());
-        }
-        catch (NullPointerException ex)
-        {
-            System.out.println(ex.getMessage());
-        }
         catch (Exception ex)
         {
-            System.out.println(ex.getMessage());
+            ErrorLog.getInstance().write(ex.getMessage());
         }
     }
 }
