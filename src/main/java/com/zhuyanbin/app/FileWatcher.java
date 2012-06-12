@@ -77,20 +77,8 @@ public class FileWatcher
 
     public boolean removeWatch() throws JNotifyException
     {
-        boolean res = false;
-        try
-        {
-            res = JNotify.removeWatch(getWatchId());
-        }
-        catch (JNotifyException ex)
-        {
-            throw ex;
-        }
-        finally
-        {
-            setWatchId(INVAILD_WATCH_ID);
-        }
-
-        return res;
+        int id = getWatchId();
+        setWatchId(INVAILD_WATCH_ID);
+        return JNotify.removeWatch(id);
     }
 }
