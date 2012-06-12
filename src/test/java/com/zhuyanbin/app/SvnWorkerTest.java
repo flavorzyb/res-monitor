@@ -36,11 +36,16 @@ public class SvnWorkerTest extends TestCase
 
     public void testUpdate() throws SVNException, NullPointerException, IOException, SecurityException, NoSuchAlgorithmException
     {
-        classRelection.update("/Users/flavor/resource/svn_work.bak", "tmp/ppp/tt.txt");
-        classRelection.update("/Users/flavor/resource/svn_work.bak", "ppp.txt");
-        classRelection.update("/Users/flavor/resource/svn_work.bak", "bbb/psp.txt");
-        classRelection.update("/Users/flavor/resource/svn_work.bak", "ppp/999");
-        classRelection.update("/Users/flavor/resource/svn_work.bak", "tt.txt");
-        classRelection.update("/Users/flavor/resource/svn_work.bak", "888");
+        // classRelection.update("/Users/flavor/resource/svn_work.bak",
+        // "tmp/ppp/tt.txt");
+        // classRelection.update("/Users/flavor/resource/svn_work.bak",
+        // "ppp.txt");
+        // classRelection.update("/Users/flavor/resource/svn_work.bak",
+        // "bbb/psp.txt");
+        // classRelection.update("/Users/flavor/resource/svn_work.bak",
+        // "ppp/999");
+        // classRelection.update("/Users/flavor/resource/svn_work.bak",
+        // "tt.txt");
+        // classRelection.update("/Users/flavor/resource/svn_work.bak", "888");
     }
 }

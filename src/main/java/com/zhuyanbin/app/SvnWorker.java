@@ -111,11 +111,8 @@ public class SvnWorker
             {
                 if (isFile(sourcePath, filePath))
                 {
-                    if (!Md5CheckSum.md5StringIsSame(sourcePath + "/" + filePath, fullPath))
-                    {
-                        copyFile(sourcePath, filePath);
-                        _item.add(new SvnItem(fullPath, true, true));
-                    }
+                    copyFile(sourcePath, filePath);
+                    _item.add(new SvnItem(fullPath, true, true));
                 }
                 else
                 {

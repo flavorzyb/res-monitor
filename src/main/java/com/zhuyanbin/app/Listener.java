@@ -56,7 +56,7 @@ public class Listener implements JNotifyListener
         {
             Date dt = new Date();
             Timestamp ts = new Timestamp(dt.getTime());
-            String msg = ts + "|" + rootPath + newName + "\n";
+            String msg = ts + "|" + newName + "\n";
             FileOutputStream fos = new FileOutputStream(getLogFile(), true);
             fos.write(msg.getBytes());
             fos.flush();

@@ -1,8 +1,10 @@
 package com.zhuyanbin.app;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 
 public class FileLogWorker extends Thread
@@ -95,6 +97,46 @@ public class FileLogWorker extends Thread
     public int getStatus()
     {
         return _status;
+    }
+
+    @Override
+    public void start()
+    {
+        doingLogToLogFile();
+        super.start();
+    }
+
+    private void doingLogToLogFile()
+    {
+        File fp = new File(getDoingLogPath());
+        try
+        {
+            if (fp.exists())
+            {
+                FileInputStream in = new FileInputStream(fp);
+                BufferedInputStream inBis = new BufferedInputStream(in);
+
+                FileOutputStream fos = new FileOutputStream(getLogPath(), true);
+
+                byte[] buff = new byte[1024 * 5];
+                int len = 0;
+                while (-1 != (len = inBis.read(buff)))
+                {
+                    fos.write(buff, 0, len);
+                }
+
+                inBis.close();
+                in.close();
+                fos.flush();
+                fos.close();
+
+                fp.delete();
+            }
+        }
+        catch (Exception ex)
+        {
+            System.out.println(ex.getMessage());
+        }
     }
 
     @Override

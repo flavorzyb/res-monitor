@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="resource monitor config">
-<sourcepath path="src/main"/>
-<destpath path="src/test"/>
+<sourcepath path="/Users/flavor/resource/svn_work.bak"/>
+<destpath path="/Users/flavor/resource/svn_work"/>
 <svn>
-    <username param="test"/>
-    <password param="password"/>
+    <username param="yanbin"/>
+    <password param="123456"/>
 </svn>
 <logs>
     <logpath path="logs/resmonitor.log"/>
