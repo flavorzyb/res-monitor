@@ -11,17 +11,19 @@ public class FileLogWorker extends Thread
 
     private final static int STATUS_IS_SLEEP = 1;
 
-    private String   _logPath;
-    private String   _doingLogPath;
-    private ErrorLog _errorLog;
-    private boolean  _isLoop = true;
+    private String           _logPath;
+    private String           _doingLogPath;
+    private SvnWorkConfig    _swc;
+    private ErrorLog         _errorLog;
+    private boolean          _isLoop         = true;
     private int              _status         = STATUS_IS_SLEEP;
 
-    public FileLogWorker(String logPath, String doingLogPath, ErrorLog errorLog)
+    public FileLogWorker(String logPath, String doingLogPath, ErrorLog errorLog, SvnWorkConfig swc)
     {
         setLogPath(logPath);
         setDoingLogPath(doingLogPath);
         setErrorLog(errorLog);
+        setSvnWorkConfig(swc);
     }
 
     private void setLogPath(String logPath)
@@ -42,6 +44,16 @@ public class FileLogWorker extends Thread
     public String getDoingLogPath()
     {
         return _doingLogPath;
+    }
+
+    private void setSvnWorkConfig(SvnWorkConfig swc)
+    {
+        _swc = swc;
+    }
+
+    public SvnWorkConfig getSvnWorkConfig()
+    {
+        return _swc;
     }
 
     private void setErrorLog(ErrorLog errorLog)
@@ -103,6 +115,26 @@ public class FileLogWorker extends Thread
                 getErrorLog().write(ex.getMessage());
             }
         }
+    }
+
+    private String getFilePathFromString(String msg)
+    {
+        String result = "";
+        if (null != msg)
+        {
+            int index = msg.indexOf("|");
+            if (index >= 0)
+            {
+                if (index >= msg.length())
+                {
+                    index = msg.length() -1;
+                }
+
+                result = msg.substring(index + 1);
+            }
+        }
+
+        return result;
     }
 
     public void setIsLoop(boolean isLoop)

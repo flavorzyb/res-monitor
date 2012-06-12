@@ -19,20 +19,23 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil;
 
 public class SvnWorker
 {
-    private String _userName;
-    private String _password;
-    private String _svnUrl;
-    private String _rootPath;
     private SVNClientManager _scm;
-
+    private SvnWorkConfig    _swc;
     private Vector<SvnItem>  _item;
 
-    public SvnWorker(String svnUrl, String rootPath, String username, String password)
+    public SvnWorker(SvnWorkConfig swc)
     {
-        setSvnUrl(svnUrl);
-        setRootPath(rootPath);
-        setUserName(username);
-        setPassword(password);
+        setSvnWorkConfig(swc);
+    }
+    
+    private void setSvnWorkConfig(SvnWorkConfig swc)
+    {
+        _swc = swc;
+    }
+    
+    public SvnWorkConfig getSvnWorkConfig()
+    {
+        return _swc;
     }
 
     public SVNClientManager getSVNClientManager()
@@ -40,7 +43,7 @@ public class SvnWorker
         if (null == _scm)
         {
             SVNClientManager scm = SVNClientManager.newInstance();
-            ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(getUserName(), getPassword());
+            ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(getSvnWorkConfig().getUserName(), getSvnWorkConfig().getPassword());
             scm.setAuthenticationManager(authManager);
             setSVNClientManager(scm);
         }
@@ -52,47 +55,6 @@ public class SvnWorker
     {
         _scm = scm;
     }
-
-    private void setUserName(String username)
-    {
-        _userName = username;
-    }
-
-    public String getUserName()
-    {
-        return _userName;
-    }
-
-    private void setPassword(String password)
-    {
-        _password = password;
-    }
-
-    public String getPassword()
-    {
-        return _password;
-    }
-
-    private void setSvnUrl(String svnUrl)
-    {
-        _svnUrl = svnUrl;
-    }
-
-    public String getSvnUrl()
-    {
-        return _svnUrl;
-    }
-
-    private void setRootPath(String rootPath)
-    {
-        _rootPath = rootPath;
-    }
-
-    public String getRootPath()
-    {
-        return _rootPath;
-    }
-
     private boolean isFile(String sourcePath, String filePath) throws NullPointerException, SecurityException
     {
         File fp = new File(sourcePath + "/" + filePath);
@@ -101,7 +63,7 @@ public class SvnWorker
 
     private void doUpdate() throws SVNException, NullPointerException
     {
-        getSVNClientManager().getUpdateClient().doUpdate(new File(getRootPath()), SVNRevision.HEAD, SVNDepth.INFINITY, true, true);
+        getSVNClientManager().getUpdateClient().doUpdate(new File(getSvnWorkConfig().getWorkCopyPath()), SVNRevision.HEAD, SVNDepth.INFINITY, true, true);
     }
 
     private boolean doCommit(String[] filePaths) throws SVNException, NullPointerException
@@ -139,7 +101,7 @@ public class SvnWorker
 
     private void addFile2SVN(String sourcePath, String filePath) throws NullPointerException, SecurityException, IOException, SVNException, NoSuchAlgorithmException
     {
-        String fullPath = getRootPath() + "/" + filePath;
+        String fullPath = getSvnWorkConfig().getWorkCopyPath() + "/" + filePath;
         File fp = new File(fullPath);
         if (!fp.exists())
         {
@@ -163,7 +125,7 @@ public class SvnWorker
             }
             else
             {
-                String parentPath = fp.getParent().substring(getRootPath().length() + 1);
+                String parentPath = fp.getParent().substring(getSvnWorkConfig().getWorkCopyPath().length() + 1);
                 addFile2SVN(sourcePath, parentPath);
                 pfp.mkdir();
                 boolean isFile = isFile(sourcePath, filePath);
@@ -239,7 +201,7 @@ public class SvnWorker
         FileInputStream sourceFis = new FileInputStream(new File(sourcePath + "/" + filePath));
         BufferedInputStream sourceBis = new BufferedInputStream(sourceFis);
 
-        FileOutputStream destFos = new FileOutputStream(new File(getRootPath() + "/" + filePath));
+        FileOutputStream destFos = new FileOutputStream(new File(getSvnWorkConfig().getWorkCopyPath() + "/" + filePath));
         BufferedOutputStream destBos = new BufferedOutputStream(destFos);
 
         byte[] b = new byte[1024 * 5];

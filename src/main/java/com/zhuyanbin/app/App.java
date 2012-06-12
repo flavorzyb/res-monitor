@@ -28,8 +28,11 @@ public class App
 
             ErrorLog.getInstance().setLogPath(config.getErrorLogPath());
 
+            // svn work config
+            SvnWorkConfig swc = new SvnWorkConfig(config.getDestPath(), config.getUserName(), config.getPassword());
+
             // 启动同步处理进程
-            FileLogWorker flw = new FileLogWorker(config.getLogPath(), config.getDoingLogPath(), ErrorLog.getInstance());
+            FileLogWorker flw = new FileLogWorker(config.getLogPath(), config.getDoingLogPath(), ErrorLog.getInstance(), swc);
             flw.start();
 
             // 启动监控文件进程

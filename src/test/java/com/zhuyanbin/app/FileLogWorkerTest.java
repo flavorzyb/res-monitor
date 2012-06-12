@@ -14,12 +14,17 @@ public class FileLogWorkerTest extends TestCase
 
     private final String  logPath      = "src/test/logs/work.log";
     private final String  doingLogPath = "src/test/logs/work_doing.log";
+    private final String  wcPath       = "src/test/svn";
+    private final String  userName     = "test";
+    private final String  password     = "test111";
+
+    private final SvnWorkConfig swc          = new SvnWorkConfig(wcPath, userName, password);
 
     @Override
     protected void setUp() throws Exception
     {
         super.setUp();
-        classRelection = new FileLogWorker(logPath, doingLogPath, ErrorLog.getInstance());
+        classRelection = new FileLogWorker(logPath, doingLogPath, ErrorLog.getInstance(), swc);
     }
 
     @Override
@@ -56,6 +61,7 @@ public class FileLogWorkerTest extends TestCase
         assertEquals(logPath, classRelection.getLogPath());
         assertEquals(doingLogPath, classRelection.getDoingLogPath());
         assertEquals(ErrorLog.getInstance(), classRelection.getErrorLog());
+        assertEquals(swc, classRelection.getSvnWorkConfig());
     }
 
     public void testStart() throws IOException, InterruptedException
