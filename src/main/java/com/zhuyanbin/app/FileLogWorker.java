@@ -142,6 +142,9 @@ public class FileLogWorker extends Thread
     @Override
     public void run() throws IllegalThreadStateException
     {
+        FileInputStream fis = null;
+        InputStreamReader isr = null;
+        BufferedReader br = null;
         while (isLoop())
         {
             try
@@ -149,16 +152,46 @@ public class FileLogWorker extends Thread
                 if (renameLogPath())
                 {
                     setStatus(STATUS_IS_DOING);
-                    BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(getDoingLogPath())));
-                    String buf = null;
-                    while (null != (buf = br.readLine()))
+                    try
                     {
-                        String file = getFilePathFromString(buf);
-                        SvnWorker sw = new SvnWorker(getSvnWorkConfig());
-                        sw.update(getSourcePath(), file);
-                    }
+                        fis = new FileInputStream(getDoingLogPath());
+                        isr = new InputStreamReader(fis);
+                        br = new BufferedReader(isr);
 
-                    deleteDoingLog();
+                        String buf = null;
+
+                        while (null != (buf = br.readLine()))
+                        {
+                            String file = getFilePathFromString(buf);
+                            SvnWorker sw = new SvnWorker(getSvnWorkConfig());
+                            sw.update(getSourcePath(), file);
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                    finally
+                    {
+                        if (null != fis)
+                        {
+                            fis.close();
+                            fis = null;
+                        }
+
+                        if (null != isr)
+                        {
+                            isr.close();
+                            isr = null;
+                        }
+
+                        if (null != br)
+                        {
+                            br.close();
+                            br = null;
+                        }
+                    }
                 }
                 else
                 {
@@ -169,6 +202,10 @@ public class FileLogWorker extends Thread
             catch (Exception ex)
             {
                 getErrorLog().write(ex.getMessage());
+            }
+            finally
+            {
+                deleteDoingLog();
             }
         }
     }
