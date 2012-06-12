@@ -13,15 +13,17 @@ public class FileLogWorker extends Thread
 
     private String           _logPath;
     private String           _doingLogPath;
+    private String           _sourcePath;
     private SvnWorkConfig    _swc;
     private ErrorLog         _errorLog;
     private boolean          _isLoop         = true;
     private int              _status         = STATUS_IS_SLEEP;
 
-    public FileLogWorker(String logPath, String doingLogPath, ErrorLog errorLog, SvnWorkConfig swc)
+    public FileLogWorker(String logPath, String doingLogPath, String sourcePath, ErrorLog errorLog, SvnWorkConfig swc)
     {
         setLogPath(logPath);
         setDoingLogPath(doingLogPath);
+        setSourcePath(sourcePath);
         setErrorLog(errorLog);
         setSvnWorkConfig(swc);
     }
@@ -34,6 +36,16 @@ public class FileLogWorker extends Thread
     public String getLogPath()
     {
         return _logPath;
+    }
+
+    private void setSourcePath(String sourcePath)
+    {
+        _sourcePath = sourcePath;
+    }
+
+    public String getSourcePath()
+    {
+        return _sourcePath;
     }
 
     private void setDoingLogPath(String logPath)
@@ -99,7 +111,9 @@ public class FileLogWorker extends Thread
                     String buf = null;
                     while (null != (buf = br.readLine()))
                     {
-                        System.out.println(buf);
+                        String file = getFilePathFromString(buf);
+                        SvnWorker sw = new SvnWorker(getSvnWorkConfig());
+                        sw.update(getSourcePath(), file);
                     }
 
                     deleteDoingLog();
@@ -134,7 +148,7 @@ public class FileLogWorker extends Thread
             }
         }
 
-        return result;
+        return result.trim();
     }
 
     public void setIsLoop(boolean isLoop)
