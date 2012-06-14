@@ -94,8 +94,7 @@ public class ListenerTest extends TestCase
         }
         catch (Exception ex)
         {
-            System.out.println(ex.getMessage());
-            System.out.println("ddddddd:" + ex.getClass());
+            fail(ex.getMessage());
         }
     }
 }
