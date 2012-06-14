@@ -49,18 +49,23 @@ public class Listener implements JNotifyListener
     {
         writeLog(rootPath, name);
     }
+    
+    protected void writeFile(String filePath, String msg) throws FileNotFoundException, SecurityException, IOException
+    {
+        FileOutputStream fos = new FileOutputStream(filePath, true);
+        fos.write(msg.getBytes());
+        fos.flush();
+        fos.close();
+    }
 
-    private void writeLog(String rootPath, String newName)
+    protected void writeLog(String rootPath, String newName)
     {
         try
         {
             Date dt = new Date();
             Timestamp ts = new Timestamp(dt.getTime());
             String msg = ts + "|" + newName + "\n";
-            FileOutputStream fos = new FileOutputStream(getLogFile(), true);
-            fos.write(msg.getBytes());
-            fos.flush();
-            fos.close();
+            writeFile(getLogFile(), msg);
         }
         catch (FileNotFoundException ex)
         {

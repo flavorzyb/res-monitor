@@ -1,13 +1,18 @@
 package com.zhuyanbin.app;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import junit.framework.TestCase;
+
+import org.easymock.EasyMock;
 
 public class ListenerTest extends TestCase
 {
 
     private Listener classRelection;
+    private Listener     mock;
     private final String logFile = "src/test/logs/resource.log";
     @Override
     protected void setUp() throws Exception
@@ -58,5 +63,39 @@ public class ListenerTest extends TestCase
     public void testFileDeleted()
     {
         classRelection.fileDeleted(111, "./", "aaa.jpg");
+    }
+
+    public void testThrowsExceptions()
+    {
+        String file = "aaa.jpg";
+
+        try
+        {
+            mock = EasyMock.createMockBuilder(Listener.class).withConstructor(logFile).addMockedMethod("writeFile", String.class, String.class).createMock();
+            mock.writeFile(EasyMock.isA(String.class), EasyMock.isA(String.class));
+            EasyMock.expectLastCall().andThrow(new IOException("i am a IOException"));
+            EasyMock.replay(mock);
+            mock.fileCreated(111, "./", file);
+            EasyMock.verify(mock);
+
+            mock = EasyMock.createMockBuilder(Listener.class).withConstructor(logFile).addMockedMethod("writeFile", String.class, String.class).createMock();
+            mock.writeFile(EasyMock.isA(String.class), EasyMock.isA(String.class));
+            EasyMock.expectLastCall().andThrow(new SecurityException("i am a SecurityException"));
+            EasyMock.replay(mock);
+            mock.fileCreated(111, "./", file);
+            EasyMock.verify(mock);
+
+            mock = EasyMock.createMockBuilder(Listener.class).withConstructor(logFile).addMockedMethod("writeFile", String.class, String.class).createMock();
+            mock.writeFile(EasyMock.isA(String.class), EasyMock.isA(String.class));
+            EasyMock.expectLastCall().andThrow(new FileNotFoundException("i am a FileNotFoundException"));
+            EasyMock.replay(mock);
+            mock.fileCreated(111, "./", file);
+            EasyMock.verify(mock);
+        }
+        catch (Exception ex)
+        {
+            System.out.println(ex.getMessage());
+            System.out.println("ddddddd:" + ex.getClass());
+        }
     }
 }
