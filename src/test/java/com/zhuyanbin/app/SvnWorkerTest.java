@@ -44,7 +44,7 @@ public class SvnWorkerTest extends TestCase
         File fp = new File(path);
         if (!fp.exists())
         {
-            fp.mkdir();
+            fp.mkdirs();
         }
     }
 
