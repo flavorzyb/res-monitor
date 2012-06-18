@@ -12,7 +12,6 @@ public class ListenerTest extends TestCase
 {
 
     private Listener classRelection;
-    private Listener     mock;
     private final String logFile = "src/test/logs/resource.log";
     @Override
     protected void setUp() throws Exception
@@ -71,26 +70,26 @@ public class ListenerTest extends TestCase
 
         try
         {
-            mock = EasyMock.createMockBuilder(Listener.class).withConstructor(logFile).addMockedMethod("writeFile", String.class, String.class).createMock();
-            mock.writeFile(EasyMock.isA(String.class), EasyMock.isA(String.class));
+            classRelection = EasyMock.createMockBuilder(Listener.class).withConstructor(logFile).addMockedMethod("writeFile", String.class, String.class).createMock();
+            classRelection.writeFile(EasyMock.isA(String.class), EasyMock.isA(String.class));
             EasyMock.expectLastCall().andThrow(new IOException("i am a IOException"));
-            EasyMock.replay(mock);
-            mock.fileCreated(111, "./", file);
-            EasyMock.verify(mock);
+            EasyMock.replay(classRelection);
+            classRelection.fileCreated(111, "./", file);
+            EasyMock.verify(classRelection);
 
-            mock = EasyMock.createMockBuilder(Listener.class).withConstructor(logFile).addMockedMethod("writeFile", String.class, String.class).createMock();
-            mock.writeFile(EasyMock.isA(String.class), EasyMock.isA(String.class));
+            classRelection = EasyMock.createMockBuilder(Listener.class).withConstructor(logFile).addMockedMethod("writeFile", String.class, String.class).createMock();
+            classRelection.writeFile(EasyMock.isA(String.class), EasyMock.isA(String.class));
             EasyMock.expectLastCall().andThrow(new SecurityException("i am a SecurityException"));
-            EasyMock.replay(mock);
-            mock.fileCreated(111, "./", file);
-            EasyMock.verify(mock);
+            EasyMock.replay(classRelection);
+            classRelection.fileCreated(111, "./", file);
+            EasyMock.verify(classRelection);
 
-            mock = EasyMock.createMockBuilder(Listener.class).withConstructor(logFile).addMockedMethod("writeFile", String.class, String.class).createMock();
-            mock.writeFile(EasyMock.isA(String.class), EasyMock.isA(String.class));
+            classRelection = EasyMock.createMockBuilder(Listener.class).withConstructor(logFile).addMockedMethod("writeFile", String.class, String.class).createMock();
+            classRelection.writeFile(EasyMock.isA(String.class), EasyMock.isA(String.class));
             EasyMock.expectLastCall().andThrow(new FileNotFoundException("i am a FileNotFoundException"));
-            EasyMock.replay(mock);
-            mock.fileCreated(111, "./", file);
-            EasyMock.verify(mock);
+            EasyMock.replay(classRelection);
+            classRelection.fileCreated(111, "./", file);
+            EasyMock.verify(classRelection);
         }
         catch (Exception ex)
         {

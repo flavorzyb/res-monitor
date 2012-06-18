@@ -164,7 +164,7 @@ public class FileLogWorker extends Thread
                         {
                             String file = getFilePathFromString(buf);
                             SvnWorker sw = new SvnWorker(getSvnWorkConfig());
-                            sw.update(getSourcePath(), file);
+                            // sw.update(getSourcePath(), file);
                         }
 
                     }

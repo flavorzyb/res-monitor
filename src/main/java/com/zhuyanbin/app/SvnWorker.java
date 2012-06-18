@@ -61,6 +61,11 @@ public class SvnWorker
         return fp.isFile();
     }
 
+    private void doCleanUp() throws SVNException, NullPointerException
+    {
+        getSVNClientManager().getWCClient().doCleanup(new File(getSvnWorkConfig().getWorkCopyPath()));
+    }
+
     private void doUpdate() throws SVNException, NullPointerException
     {
         getSVNClientManager().getUpdateClient().doUpdate(new File(getSvnWorkConfig().getWorkCopyPath()), SVNRevision.HEAD, SVNDepth.INFINITY, true, true);
@@ -162,9 +167,11 @@ public class SvnWorker
         }
     }
 
-    public boolean update(String sourcePath, String filePath) throws SVNException, NullPointerException, IOException, SecurityException, NoSuchAlgorithmException
+    public boolean update(String sourcePath, String[] filePaths) throws SVNException, NullPointerException, IOException, SecurityException, NoSuchAlgorithmException
     {
         boolean result = false;
+        // clean up workcopy
+        doCleanUp();
         // 先更新整个svn仓库
         doUpdate();
 
@@ -172,7 +179,7 @@ public class SvnWorker
         resetSvnItemQueue();
 
         // 将文件(目录)拷贝到workcopy
-        addFile2SVN(sourcePath, filePath);
+        // addFile2SVN(sourcePath, filePath);
 
         // 添加svn事件
         if (_item.size() < 1)
@@ -180,7 +187,7 @@ public class SvnWorker
             return result;
         }
 
-        String filePaths[] = new String[_item.size()];
+        String commitFilePaths[] = new String[_item.size()];
         int i = 0;
         for (SvnItem si : _item)
         {
@@ -193,7 +200,7 @@ public class SvnWorker
             i++;
         }
 
-        result = doCommit(filePaths);
+        result = doCommit(commitFilePaths);
 
         return result;
     }
