@@ -119,23 +119,22 @@ public class SvnWorkerTest extends TestCase
 
         SVNWCClient swclient = EasyMock.createMockBuilder(SVNWCClient.class).addMockedMethod("doCleanup", File.class).addMockedMethod("doAdd", File.class, boolean.class, boolean.class, boolean.class, SVNDepth.class, boolean.class, boolean.class).createMock();
         SVNUpdateClient suclient = EasyMock.createMock(SVNUpdateClient.class);
-        SVNCommitClient sccient = EasyMock.createMockBuilder(SVNCommitClient.class).addMockedMethod("doCommit", File[].class, boolean.class, String.class, SVNProperties.class, String[].class, boolean.class, boolean.class, SVNDepth.class).createMock();
+        String[] changelists = {};
+        File[] files = { new File(workCopyPath + "/tmp/ppp/tt.txt") };
+        SVNCommitClient sccient = EasyMock.createMockBuilder(SVNCommitClient.class).addMockedMethod("doCommit", files.getClass(), boolean.class, String.class, SVNProperties.class, changelists.getClass(), boolean.class, boolean.class, SVNDepth.class).createMock();
 
         EasyMock.expect(scm.getWCClient()).andReturn(swclient).anyTimes();
         EasyMock.expect(scm.getUpdateClient()).andReturn(suclient).anyTimes();
         EasyMock.expect(scm.getCommitClient()).andReturn(sccient).anyTimes();
-
-        EasyMock.expect(suclient.doUpdate(new File(swc.getWorkCopyPath()), SVNRevision.HEAD, SVNDepth.INFINITY, true, true)).andReturn(1000L);
-
-        String[] changelists = {};
-        File[] files = { new File(workCopyPath + "/tmp/ppp/tt.txt") };
-        EasyMock.expect(sccient.doCommit(files, false, "auto commit by system", null, changelists, true, true, SVNDepth.INFINITY)).andReturn(new SVNCommitInfo(1000L, "test", new Date())).anyTimes();
 
         swclient.doCleanup(new File(swc.getWorkCopyPath()));
         EasyMock.expectLastCall().asStub();
 
         swclient.doAdd(new File(workCopyPath + "/tmp/ppp/tt.txt"), true, false, false, SVNDepth.INFINITY, false, false);
         EasyMock.expectLastCall().asStub();
+
+        EasyMock.expect(suclient.doUpdate(new File(swc.getWorkCopyPath()), SVNRevision.HEAD, SVNDepth.INFINITY, true, true)).andReturn(1000L);
+        EasyMock.expect(sccient.doCommit(files, false, "auto commit by system", null, changelists, true, true, SVNDepth.INFINITY)).andReturn(new SVNCommitInfo(1000L, "test", new Date())).anyTimes();
 
         EasyMock.replay(scm);
         EasyMock.replay(swclient);
