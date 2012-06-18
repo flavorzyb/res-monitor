@@ -43,6 +43,11 @@ public class SvnWorkerTest extends TestCase
         assertEquals(swc, classRelection.getSvnWorkConfig());
     }
 
+    public void testGetSvnClientManager()
+    {
+        assertTrue(classRelection.getSVNClientManager() instanceof SVNClientManager);
+    }
+
     public void testUpdate() throws SVNException, NullPointerException, IOException, SecurityException, NoSuchAlgorithmException
     {
         String[] filePaths = { "tmp/ppp/tt.txt" };
