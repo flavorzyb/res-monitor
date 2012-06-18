@@ -179,7 +179,17 @@ public class SvnWorker
         resetSvnItemQueue();
 
         // 将文件(目录)拷贝到workcopy
-        // addFile2SVN(sourcePath, filePath);
+        if (null == filePaths)
+        {
+            return result;
+        }
+        
+        int i = 0;
+        int len = filePaths.length;
+        for (i = 0; i < len; i++)
+        {
+            addFile2SVN(sourcePath, filePaths[i]);
+        }
 
         // 添加svn事件
         if (_item.size() < 1)
@@ -188,7 +198,7 @@ public class SvnWorker
         }
 
         String commitFilePaths[] = new String[_item.size()];
-        int i = 0;
+        i = 0;
         for (SvnItem si : _item)
         {
             if (si.isAdd())
