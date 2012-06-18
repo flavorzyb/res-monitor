@@ -48,15 +48,11 @@ public class SvnWorkerTest extends TestCase
         assertTrue(classRelection.getSVNClientManager() instanceof SVNClientManager);
     }
 
-    public void testUpdate() throws SVNException, NullPointerException, IOException, SecurityException, NoSuchAlgorithmException
+    public void testUpdateWhenFilePathsIsNull() throws SVNException, NullPointerException, IOException, SecurityException, NoSuchAlgorithmException
     {
-        String[] filePaths = { "tmp/ppp/tt.txt" };
         scm = EasyMock.createMockBuilder(SVNClientManager.class).addMockedMethod("getWCClient").addMockedMethod("getUpdateClient").createMock();
 
         SVNWCClient swclient = EasyMock.createMockBuilder(SVNWCClient.class).addMockedMethod("doCleanup", File.class).addMockedMethod("doAdd", File.class, boolean.class, boolean.class, boolean.class, SVNDepth.class, boolean.class, boolean.class).createMock();
-        // SVNWCClient swclient =
-        // EasyMock.createMockBuilder(SVNWCClient.class).addMockedMethod("doCleanup",
-        // File.class).createMock();
         SVNUpdateClient suclient = EasyMock.createMock(SVNUpdateClient.class);
         EasyMock.expect(suclient.doUpdate(new File(swc.getWorkCopyPath()), SVNRevision.HEAD, SVNDepth.INFINITY, true, true)).andReturn(1000L);
 
@@ -66,10 +62,34 @@ public class SvnWorkerTest extends TestCase
         swclient.doCleanup(new File(swc.getWorkCopyPath()));
         EasyMock.expectLastCall().asStub();
 
-        // swclient.doAdd(EasyMock.isA(File.class), EasyMock.isA(boolean.class),
-        // EasyMock.isA(boolean.class), EasyMock.isA(boolean.class),
-        // EasyMock.isA(SVNDepth.class), EasyMock.isA(boolean.class),
-        // EasyMock.isA(boolean.class));
+        swclient.doAdd(new File("tmp/ppp/tt.txt"), true, false, false, SVNDepth.INFINITY, false, false);
+        EasyMock.expectLastCall().asStub();
+
+        EasyMock.replay(scm);
+        EasyMock.replay(swclient);
+        EasyMock.replay(suclient);
+
+        classRelection.setSVNClientManager(scm);
+        classRelection.update(sourcePath, null);
+        EasyMock.verify(scm);
+        EasyMock.verify(swclient);
+        EasyMock.verify(suclient);
+    }
+
+    public void testUpdate() throws SVNException, NullPointerException, IOException, SecurityException, NoSuchAlgorithmException
+    {
+        String[] filePaths = { "tmp/ppp/tt.txt" };
+        scm = EasyMock.createMockBuilder(SVNClientManager.class).addMockedMethod("getWCClient").addMockedMethod("getUpdateClient").createMock();
+
+        SVNWCClient swclient = EasyMock.createMockBuilder(SVNWCClient.class).addMockedMethod("doCleanup", File.class).addMockedMethod("doAdd", File.class, boolean.class, boolean.class, boolean.class, SVNDepth.class, boolean.class, boolean.class).createMock();
+        SVNUpdateClient suclient = EasyMock.createMock(SVNUpdateClient.class);
+        EasyMock.expect(suclient.doUpdate(new File(swc.getWorkCopyPath()), SVNRevision.HEAD, SVNDepth.INFINITY, true, true)).andReturn(1000L);
+
+        EasyMock.expect(scm.getWCClient()).andReturn(swclient);
+        EasyMock.expect(scm.getUpdateClient()).andReturn(suclient);
+
+        swclient.doCleanup(new File(swc.getWorkCopyPath()));
+        EasyMock.expectLastCall().asStub();
 
         swclient.doAdd(new File("tmp/ppp/tt.txt"), true, false, false, SVNDepth.INFINITY, false, false);
         EasyMock.expectLastCall().asStub();
