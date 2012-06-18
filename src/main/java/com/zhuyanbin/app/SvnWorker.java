@@ -206,7 +206,7 @@ public class SvnWorker
                 doAdd(si.getPath(), si.isFile());
             }
 
-            filePaths[i] = si.getPath();
+            commitFilePaths[i] = si.getPath();
             i++;
         }
 

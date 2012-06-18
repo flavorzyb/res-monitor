@@ -3,13 +3,17 @@ package com.zhuyanbin.app;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 
 import junit.framework.TestCase;
 
 import org.easymock.EasyMock;
+import org.tmatesoft.svn.core.SVNCommitInfo;
 import org.tmatesoft.svn.core.SVNDepth;
 import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNProperties;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
+import org.tmatesoft.svn.core.wc.SVNCommitClient;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 import org.tmatesoft.svn.core.wc.SVNUpdateClient;
 import org.tmatesoft.svn.core.wc.SVNWCClient;
@@ -111,30 +115,39 @@ public class SvnWorkerTest extends TestCase
     public void testUpdate() throws SVNException, NullPointerException, IOException, SecurityException, NoSuchAlgorithmException
     {
         String[] filePaths = { "tmp/ppp/tt.txt" };
-        scm = EasyMock.createMockBuilder(SVNClientManager.class).addMockedMethod("getWCClient").addMockedMethod("getUpdateClient").createMock();
+        scm = EasyMock.createMockBuilder(SVNClientManager.class).addMockedMethod("getWCClient").addMockedMethod("getUpdateClient").addMockedMethod("getCommitClient").createMock();
 
         SVNWCClient swclient = EasyMock.createMockBuilder(SVNWCClient.class).addMockedMethod("doCleanup", File.class).addMockedMethod("doAdd", File.class, boolean.class, boolean.class, boolean.class, SVNDepth.class, boolean.class, boolean.class).createMock();
         SVNUpdateClient suclient = EasyMock.createMock(SVNUpdateClient.class);
+        SVNCommitClient sccient = EasyMock.createMockBuilder(SVNCommitClient.class).addMockedMethod("doCommit", File[].class, boolean.class, String.class, SVNProperties.class, String[].class, boolean.class, boolean.class, SVNDepth.class).createMock();
+
+        EasyMock.expect(scm.getWCClient()).andReturn(swclient).anyTimes();
+        EasyMock.expect(scm.getUpdateClient()).andReturn(suclient).anyTimes();
+        EasyMock.expect(scm.getCommitClient()).andReturn(sccient).anyTimes();
+
         EasyMock.expect(suclient.doUpdate(new File(swc.getWorkCopyPath()), SVNRevision.HEAD, SVNDepth.INFINITY, true, true)).andReturn(1000L);
 
-        EasyMock.expect(scm.getWCClient()).andReturn(swclient);
-        EasyMock.expect(scm.getUpdateClient()).andReturn(suclient);
+        String[] changelists = {};
+        File[] files = { new File(workCopyPath + "/tmp/ppp/tt.txt") };
+        EasyMock.expect(sccient.doCommit(files, false, "auto commit by system", null, changelists, true, true, SVNDepth.INFINITY)).andReturn(new SVNCommitInfo(1000L, "test", new Date())).anyTimes();
 
         swclient.doCleanup(new File(swc.getWorkCopyPath()));
         EasyMock.expectLastCall().asStub();
 
-        swclient.doAdd(new File("tmp/ppp/tt.txt"), true, false, false, SVNDepth.INFINITY, false, false);
+        swclient.doAdd(new File(workCopyPath + "/tmp/ppp/tt.txt"), true, false, false, SVNDepth.INFINITY, false, false);
         EasyMock.expectLastCall().asStub();
 
         EasyMock.replay(scm);
         EasyMock.replay(swclient);
         EasyMock.replay(suclient);
+        EasyMock.replay(sccient);
 
         classRelection.setSVNClientManager(scm);
         classRelection.update(sourcePath, filePaths);
         EasyMock.verify(scm);
         EasyMock.verify(swclient);
         EasyMock.verify(suclient);
+        EasyMock.verify(sccient);
         /*
          * classRelection.update("/Users/flavor/resource/svn_work.bak",
          * "ppp.txt");
