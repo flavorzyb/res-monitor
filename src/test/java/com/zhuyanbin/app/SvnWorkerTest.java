@@ -17,7 +17,7 @@ import org.tmatesoft.svn.core.wc.SVNWCClient;
 public class SvnWorkerTest extends TestCase
 {
     private SvnWorker classRelection;
-    private final String        sourcePath   = "src/test/svn/dest";
+    private final String        sourcePath   = "src/test/svn/source";
     private final String        workCopyPath = "src/test/svn/dest";
     private final String        userName     = "test";
     private final String        password     = "123456";
