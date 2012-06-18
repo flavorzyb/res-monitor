@@ -28,7 +28,8 @@ public class SvnWorkerTest extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-
+        deleteFile(workCopyPath);
+        createDir(workCopyPath);
         classRelection = new SvnWorker(swc);
     }
 
@@ -36,6 +37,37 @@ public class SvnWorkerTest extends TestCase
     protected void tearDown() throws Exception
     {
         super.tearDown();
+    }
+
+    protected void createDir(String path)
+    {
+        File fp = new File(path);
+        if (!fp.exists())
+        {
+            fp.mkdir();
+        }
+    }
+
+    protected void deleteFile(String path)
+    {
+        File fp = new File(path);
+
+        if (fp.exists())
+        {
+            if (fp.isFile())
+            {
+                fp.delete();
+            }
+            else if (fp.isDirectory())
+            {
+                File[] files = fp.listFiles();
+                int len = files.length;
+                for (int i = 0; i < len; i++)
+                {
+                    deleteFile(files[i].getAbsolutePath());
+                }
+            }
+        }
     }
 
     public void testInit()
