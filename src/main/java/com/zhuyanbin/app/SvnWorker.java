@@ -75,11 +75,6 @@ public class SvnWorker
     {
         File[] files;
 
-        if (null == filePaths)
-        {
-            return false;
-        }
-
         int len = filePaths.length;
         files = new File[len];
         for (int i = 0; i < len; i++)
@@ -132,11 +127,8 @@ public class SvnWorker
                 boolean isFile = isFile(sourcePath, filePath);
                 if (isFile)
                 {
-                    if (!(fp.exists() && Md5CheckSum.md5StringIsSame(sourcePath + "/" + filePath, fullPath)))
-                    {
-                        copyFile(sourcePath, filePath);
-                        _item.add(new SvnItem(fullPath, true, isFile));
-                    }
+                    copyFile(sourcePath, filePath);
+                    _item.add(new SvnItem(fullPath, true, isFile));
                 }
                 else
                 {
