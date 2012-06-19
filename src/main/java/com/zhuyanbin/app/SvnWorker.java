@@ -129,11 +129,10 @@ public class SvnWorker
             {
                 String parentPath = fp.getParent().substring(getSvnWorkConfig().getWorkCopyPath().length() + 1);
                 addFile2SVN(sourcePath, parentPath);
-                pfp.mkdir();
                 boolean isFile = isFile(sourcePath, filePath);
                 if (isFile)
                 {
-                    if (!Md5CheckSum.md5StringIsSame(sourcePath + "/" + filePath, fullPath))
+                    if (!(fp.exists() && Md5CheckSum.md5StringIsSame(sourcePath + "/" + filePath, fullPath)))
                     {
                         copyFile(sourcePath, filePath);
                         _item.add(new SvnItem(fullPath, true, isFile));
@@ -141,6 +140,7 @@ public class SvnWorker
                 }
                 else
                 {
+                    fp.mkdir();
                     _item.add(new SvnItem(fullPath, true, isFile));
                 }
             }
