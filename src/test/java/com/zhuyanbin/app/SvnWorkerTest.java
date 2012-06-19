@@ -194,6 +194,8 @@ public class SvnWorkerTest extends TestCase
 
     public void testUpdateFileSucc() throws SVNException, NullPointerException, IOException, SecurityException, NoSuchAlgorithmException
     {
+        deleteFile(sourcePath + "/ttt.txt");
+
         copyFile(sourcePath + "/tt.txt", sourcePath + "/ttt.txt");
         String[] filePaths = { "ttt.txt" };
         vaildMock(filePaths);
@@ -240,15 +242,9 @@ public class SvnWorkerTest extends TestCase
         swclient.doCleanup(new File(swc.getWorkCopyPath()));
         EasyMock.expectLastCall().asStub();
 
-        // swclient.doAdd(EasyMock.anyObject(File.class), EasyMock.anyBoolean(),
-        // EasyMock.anyBoolean(), EasyMock.anyBoolean(),
-        // EasyMock.anyObject(SVNDepth.class), EasyMock.anyBoolean(),
-        // EasyMock.anyBoolean());
-        // EasyMock.expectLastCall().anyTimes().asStub();
-
         EasyMock.expect(suclient.doUpdate(new File(swc.getWorkCopyPath()), SVNRevision.HEAD, SVNDepth.INFINITY, true, true)).andReturn(1000L);
 
-        EasyMock.expect(scclient.doCommit(EasyMock.anyObject(File[].class), EasyMock.anyBoolean(), EasyMock.anyObject(String.class), EasyMock.anyObject(SVNProperties.class), EasyMock.anyObject(String[].class), EasyMock.anyBoolean(), EasyMock.anyBoolean(), EasyMock.anyObject(SVNDepth.class))).andReturn(new SVNCommitInfo(1000L, "test", new Date()));
+        EasyMock.expect(scclient.doCommit(EasyMock.anyObject(File[].class), EasyMock.anyBoolean(), EasyMock.anyObject(String.class), EasyMock.anyObject(SVNProperties.class), EasyMock.anyObject(String[].class), EasyMock.anyBoolean(), EasyMock.anyBoolean(), EasyMock.anyObject(SVNDepth.class))).andReturn(new SVNCommitInfo(0L, "test", new Date()));
 
         EasyMock.replay(scm);
         EasyMock.replay(swclient);
@@ -262,6 +258,32 @@ public class SvnWorkerTest extends TestCase
         EasyMock.verify(suclient);
         EasyMock.verify(scclient);
 
+        deleteFile(sourcePath + "/ttt.txt");
+
+        //
+        createDir(sourcePath + "/ttt.txt");
+        scm = EasyMock.createMockBuilder(SVNClientManager.class).addMockedMethod("getWCClient").addMockedMethod("getUpdateClient").addMockedMethod("getCommitClient").createMock();
+
+        swclient = EasyMock.createMockBuilder(SVNWCClient.class).addMockedMethod("doCleanup", File.class).createMock();
+        suclient = EasyMock.createMock(SVNUpdateClient.class);
+
+        EasyMock.expect(scm.getWCClient()).andReturn(swclient).anyTimes();
+        EasyMock.expect(scm.getUpdateClient()).andReturn(suclient).anyTimes();
+
+        swclient.doCleanup(new File(swc.getWorkCopyPath()));
+        EasyMock.expectLastCall().asStub();
+
+        EasyMock.expect(suclient.doUpdate(new File(swc.getWorkCopyPath()), SVNRevision.HEAD, SVNDepth.INFINITY, true, true)).andReturn(1000L);
+
+        EasyMock.replay(scm);
+        EasyMock.replay(swclient);
+        EasyMock.replay(suclient);
+
+        classRelection.setSVNClientManager(scm);
+        classRelection.update(sourcePath, filePaths);
+        EasyMock.verify(scm);
+        EasyMock.verify(swclient);
+        EasyMock.verify(suclient);
         deleteFile(sourcePath + "/ttt.txt");
     }
 
