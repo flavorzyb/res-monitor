@@ -119,11 +119,6 @@ public class SvnWorkerTest extends TestCase
 
         SVNWCClient swclient = EasyMock.createMockBuilder(SVNWCClient.class).addMockedMethod("doCleanup", File.class).addMockedMethod("doAdd", File.class, boolean.class, boolean.class, boolean.class, SVNDepth.class, boolean.class, boolean.class).createMock();
         SVNUpdateClient suclient = EasyMock.createMock(SVNUpdateClient.class);
-        // SVNCommitClient sccient =
-        // EasyMock.createMockBuilder(SVNCommitClient.class).addMockedMethod("doCommit",
-        // File[].class, boolean.class, String.class, SVNProperties.class,
-        // String[].class, boolean.class, boolean.class,
-        // SVNDepth.class).createMock();
         SVNCommitClient scclient = EasyMock.createMock(SVNCommitClient.class);
 
         EasyMock.expect(scm.getWCClient()).andReturn(swclient).anyTimes();
@@ -154,17 +149,6 @@ public class SvnWorkerTest extends TestCase
         EasyMock.verify(swclient);
         EasyMock.verify(suclient);
         EasyMock.verify(scclient);
-        /*
-         * classRelection.update("/Users/flavor/resource/svn_work.bak",
-         * "ppp.txt");
-         * classRelection.update("/Users/flavor/resource/svn_work.bak",
-         * "bbb/psp.txt");
-         * classRelection.update("/Users/flavor/resource/svn_work.bak",
-         * "ppp/999");
-         * classRelection.update("/Users/flavor/resource/svn_work.bak",
-         * "tt.txt");
-         * classRelection.update("/Users/flavor/resource/svn_work.bak", "888");
-         */
     }
 
 }
