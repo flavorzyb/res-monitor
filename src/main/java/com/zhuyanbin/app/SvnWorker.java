@@ -88,7 +88,7 @@ public class SvnWorker
         }
 
         String[] changelist = {};
-        SVNCommitInfo sci = getSVNClientManager().getCommitClient().doCommit(files, false, "auto commit by system", null, changelist, true, true, SVNDepth.INFINITY);
+        SVNCommitInfo sci = getSVNClientManager().getCommitClient().doCommit(null, false, "auto commit by system", null, null, true, true, SVNDepth.INFINITY);
 
         return (sci.getNewRevision() > 0);
     }
