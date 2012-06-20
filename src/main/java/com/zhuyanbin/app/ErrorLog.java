@@ -37,6 +37,7 @@ public class ErrorLog
     {
         try
         {
+            System.out.println(str);
             Date dt = new Date();
             Timestamp ts = new Timestamp(dt.getTime());
             String msg = ts + "|" + str + "\n";

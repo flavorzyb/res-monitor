@@ -3,14 +3,20 @@ package com.zhuyanbin.app;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Vector;
 
 import junit.framework.TestCase;
+
+import org.easymock.EasyMock;
+import org.tmatesoft.svn.core.SVNException;
 
 public class FileLogWorkerTest extends TestCase
 {
     private FileLogWorker classRelection;
+    private SvnWorker           svnworker;
 
     private final String        logPath      = "src/test/logs/work.log";
     private final String        doingLogPath = "src/test/logs/work_doing.log";
@@ -18,6 +24,7 @@ public class FileLogWorkerTest extends TestCase
     private final String        wcPath       = "src/test/svn/dest";
     private final String        userName     = "test";
     private final String        password     = "test111";
+    private final Vector<String> updateFiles  = new Vector<String>();
 
     private final SvnWorkConfig swc          = new SvnWorkConfig(wcPath, userName, password);
 
@@ -25,6 +32,7 @@ public class FileLogWorkerTest extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
+        svnworker = EasyMock.createMockBuilder(SvnWorker.class).addMockedMethod("update", String.class, Vector.class).createMock();
         classRelection = new FileLogWorker(logPath, doingLogPath, sourcePath, ErrorLog.getInstance(), swc);
     }
 
@@ -66,23 +74,18 @@ public class FileLogWorkerTest extends TestCase
         assertEquals(sourcePath, classRelection.getSourcePath());
     }
 
-    public void testStartWithDoingLog() throws IOException, InterruptedException
+    @SuppressWarnings("unchecked")
+    public void testStartWithDoingLog() throws IOException, InterruptedException, SVNException, NullPointerException, SecurityException, NoSuchAlgorithmException
     {
         createFile(doingLogPath);
         createFile(logPath);
 
-        WorkChecker wc = new WorkChecker(classRelection);
-        classRelection.setDaemon(true);
-        classRelection.start();
-        wc.setDaemon(true);
-        wc.start();
-        wc.join();
-        classRelection.join();
-    }
-    
-    public void testStart() throws IOException, InterruptedException
-    {
-        createFile(logPath);
+        classRelection = EasyMock.createMockBuilder(FileLogWorker.class).withConstructor(logPath, doingLogPath, sourcePath, ErrorLog.getInstance(), swc).addMockedMethod("getSvnWorker").createMock();
+        EasyMock.expect(classRelection.getSvnWorker()).andReturn(svnworker).anyTimes();
+        EasyMock.expect(svnworker.update(EasyMock.anyObject(String.class), EasyMock.anyObject(updateFiles.getClass()))).andReturn(true).anyTimes();
+
+        EasyMock.replay(classRelection);
+        EasyMock.replay(svnworker);
 
         WorkChecker wc = new WorkChecker(classRelection);
         classRelection.setDaemon(true);
@@ -91,6 +94,56 @@ public class FileLogWorkerTest extends TestCase
         wc.start();
         wc.join();
         classRelection.join();
+
+        EasyMock.verify(svnworker);
+        EasyMock.verify(classRelection);
+
+    }
+    
+    public void testStart() throws IOException, InterruptedException, SVNException, NullPointerException, SecurityException, NoSuchAlgorithmException
+    {
+        createFile(logPath);
+
+        classRelection = EasyMock.createMockBuilder(FileLogWorker.class).withConstructor(logPath, doingLogPath, sourcePath, ErrorLog.getInstance(), swc).addMockedMethod("getSvnWorker").createMock();
+        EasyMock.expect(classRelection.getSvnWorker()).andReturn(svnworker).anyTimes();
+        EasyMock.expect(svnworker.update(EasyMock.anyObject(String.class), EasyMock.anyObject(updateFiles.getClass()))).andReturn(true).anyTimes();
+
+        EasyMock.replay(classRelection);
+        EasyMock.replay(svnworker);
+
+        WorkChecker wc = new WorkChecker(classRelection);
+        classRelection.setDaemon(true);
+        classRelection.start();
+        wc.setDaemon(true);
+        wc.start();
+        wc.join();
+        classRelection.join();
+
+        EasyMock.verify(svnworker);
+        EasyMock.verify(classRelection);
+    }
+
+    public void testStartWithThrowException() throws IOException, InterruptedException, SVNException, NullPointerException, SecurityException, NoSuchAlgorithmException
+    {
+        createFile(logPath);
+
+        classRelection = EasyMock.createMockBuilder(FileLogWorker.class).withConstructor(logPath, doingLogPath, sourcePath, ErrorLog.getInstance(), swc).addMockedMethod("getSvnWorker").createMock();
+        EasyMock.expect(classRelection.getSvnWorker()).andReturn(svnworker).anyTimes();
+        EasyMock.expect(svnworker.update(EasyMock.anyObject(String.class), EasyMock.anyObject(updateFiles.getClass()))).andThrow(new IOException("throw a IOException when svnworker update"));
+
+        EasyMock.replay(classRelection);
+        EasyMock.replay(svnworker);
+
+        WorkChecker wc = new WorkChecker(classRelection);
+        classRelection.setDaemon(true);
+        classRelection.start();
+        wc.setDaemon(true);
+        wc.start();
+        wc.join();
+        classRelection.join();
+
+        EasyMock.verify(svnworker);
+        EasyMock.verify(classRelection);
     }
 
     public void testGetSvnWorker()
