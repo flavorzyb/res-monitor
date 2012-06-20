@@ -110,15 +110,21 @@ public class FileLogWorker extends Thread
 
     protected void doingLogToLogFile()
     {
-        File fp = new File(getDoingLogPath());
+        File fp = null;
+
+        FileInputStream in = null;
+        BufferedInputStream inBis = null;
+        FileOutputStream fos = null;
+
         try
         {
+            fp = new File(getDoingLogPath());
             if (fp.exists())
             {
-                FileInputStream in = new FileInputStream(fp);
-                BufferedInputStream inBis = new BufferedInputStream(in);
+                in = new FileInputStream(fp);
+                inBis = new BufferedInputStream(in);
 
-                FileOutputStream fos = new FileOutputStream(getLogPath(), true);
+                fos = new FileOutputStream(getLogPath(), true);
 
                 byte[] buff = new byte[1024 * 5];
                 int len = 0;
@@ -126,18 +132,44 @@ public class FileLogWorker extends Thread
                 {
                     fos.write(buff, 0, len);
                 }
-
-                inBis.close();
-                in.close();
-                fos.flush();
-                fos.close();
-
-                fp.delete();
             }
         }
         catch (Exception ex)
         {
             System.out.println(ex.getMessage());
+        }
+        finally
+        {
+            try
+            {
+                if (null != inBis)
+                {
+                    inBis.close();
+                    inBis = null;
+                }
+
+                if (null != in)
+                {
+                    in.close();
+                    in = null;
+                }
+
+                if (null != fos)
+                {
+                    fos.flush();
+                    fos.close();
+                    fos = null;
+                }
+
+                if (null != fp)
+                {
+                    fp.delete();
+                    fp = null;
+                }
+            }
+            catch (Exception ex)
+            {
+            }
         }
     }
 
@@ -178,6 +210,7 @@ public class FileLogWorker extends Thread
                             file = getFilePathFromString(buf);
                             updateFiles.add(file);
                         }
+                        getSvnWorker().update(getSourcePath(), updateFiles);
                     }
                     catch (Exception ex)
                     {

@@ -66,7 +66,7 @@ public class FileLogWorkerTest extends TestCase
         assertEquals(sourcePath, classRelection.getSourcePath());
     }
 
-    public void testStart() throws IOException, InterruptedException
+    public void testStartWithDoingLog() throws IOException, InterruptedException
     {
         createFile(doingLogPath);
         createFile(logPath);
@@ -78,6 +78,25 @@ public class FileLogWorkerTest extends TestCase
         wc.start();
         wc.join();
         classRelection.join();
+    }
+    
+    public void testStart() throws IOException, InterruptedException
+    {
+        createFile(logPath);
+
+        WorkChecker wc = new WorkChecker(classRelection);
+        classRelection.setDaemon(true);
+        classRelection.start();
+        wc.setDaemon(true);
+        wc.start();
+        wc.join();
+        classRelection.join();
+    }
+
+    public void testGetSvnWorker()
+    {
+        assertTrue(classRelection.getSvnWorker() instanceof SvnWorker);
+        assertTrue(classRelection.getSvnWorker() instanceof SvnWorker);
     }
 }
 
