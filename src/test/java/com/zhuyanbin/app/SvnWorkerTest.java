@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.Vector;
 
 import junit.framework.TestCase;
 
@@ -117,7 +118,7 @@ public class SvnWorkerTest extends TestCase
         EasyMock.verify(suclient);
     }
 
-    private void vaildMock(String[] filePaths) throws SVNException, NullPointerException, IOException, SecurityException, NoSuchAlgorithmException
+    private void vaildMock(Vector<String> filePaths) throws SVNException, NullPointerException, IOException, SecurityException, NoSuchAlgorithmException
     {
         scm = EasyMock.createMockBuilder(SVNClientManager.class).addMockedMethod("getWCClient").addMockedMethod("getUpdateClient").addMockedMethod("getCommitClient").createMock();
 
@@ -154,13 +155,15 @@ public class SvnWorkerTest extends TestCase
 
     public void testUpdateSucc() throws SVNException, NullPointerException, IOException, SecurityException, NoSuchAlgorithmException
     {
-        String[] filePaths = { "tmp/ppp/tt.txt" };
+        Vector<String> filePaths = new Vector<String>();
+        filePaths.add("tmp/ppp/tt.txt");
         vaildMock(filePaths);
     }
 
     public void testUpdateFolderWhenExist() throws SVNException, NullPointerException, IOException, SecurityException, NoSuchAlgorithmException
     {
-        String[] filePaths = { "tmp/ppp" };
+        Vector<String> filePaths = new Vector<String>();
+        filePaths.add("tmp/ppp");
         vaildMock(filePaths);
 
         // when is exists
@@ -197,7 +200,8 @@ public class SvnWorkerTest extends TestCase
         deleteFile(sourcePath + "/ttt.txt");
 
         copyFile(sourcePath + "/tt.txt", sourcePath + "/ttt.txt");
-        String[] filePaths = { "ttt.txt" };
+        Vector<String> filePaths = new Vector<String>();
+        filePaths.add("ttt.txt");
         vaildMock(filePaths);
 
         // when is exists

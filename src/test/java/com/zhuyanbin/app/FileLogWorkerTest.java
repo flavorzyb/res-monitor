@@ -12,12 +12,12 @@ public class FileLogWorkerTest extends TestCase
 {
     private FileLogWorker classRelection;
 
-    private final String  logPath      = "src/test/logs/work.log";
-    private final String  doingLogPath = "src/test/logs/work_doing.log";
-    private final String        sourcePath   = "src/test/svn.bak";
-    private final String  wcPath       = "src/test/svn";
-    private final String  userName     = "test";
-    private final String  password     = "test111";
+    private final String        logPath      = "src/test/logs/work.log";
+    private final String        doingLogPath = "src/test/logs/work_doing.log";
+    private final String        sourcePath   = "src/test/svn/source";
+    private final String        wcPath       = "src/test/svn/dest";
+    private final String        userName     = "test";
+    private final String        password     = "test111";
 
     private final SvnWorkConfig swc          = new SvnWorkConfig(wcPath, userName, password);
 
@@ -68,6 +68,7 @@ public class FileLogWorkerTest extends TestCase
 
     public void testStart() throws IOException, InterruptedException
     {
+        createFile(doingLogPath);
         createFile(logPath);
 
         WorkChecker wc = new WorkChecker(classRelection);

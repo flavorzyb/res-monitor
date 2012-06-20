@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
+import java.util.Vector;
 
 public class FileLogWorker extends Thread
 {
@@ -20,6 +21,7 @@ public class FileLogWorker extends Thread
     private ErrorLog         _errorLog;
     private boolean          _isLoop         = true;
     private int              _status         = STATUS_IS_SLEEP;
+    private SvnWorker        _svnWorker;
 
     public FileLogWorker(String logPath, String doingLogPath, String sourcePath, ErrorLog errorLog, SvnWorkConfig swc)
     {
@@ -80,7 +82,7 @@ public class FileLogWorker extends Thread
         return _errorLog;
     }
 
-    private void setStatus(int status)
+    protected void setStatus(int status)
     {
         switch (status)
         {
@@ -106,7 +108,7 @@ public class FileLogWorker extends Thread
         super.start();
     }
 
-    private void doingLogToLogFile()
+    protected void doingLogToLogFile()
     {
         File fp = new File(getDoingLogPath());
         try
@@ -139,6 +141,16 @@ public class FileLogWorker extends Thread
         }
     }
 
+    public SvnWorker getSvnWorker()
+    {
+        if (null == _svnWorker)
+        {
+            _svnWorker = new SvnWorker(getSvnWorkConfig());
+        }
+
+        return _svnWorker;
+    }
+
     @Override
     public void run() throws IllegalThreadStateException
     {
@@ -159,14 +171,13 @@ public class FileLogWorker extends Thread
                         br = new BufferedReader(isr);
 
                         String buf = null;
-
+                        String file;
+                        Vector<String> updateFiles = new Vector<String>();
                         while (null != (buf = br.readLine()))
                         {
-                            String file = getFilePathFromString(buf);
-                            SvnWorker sw = new SvnWorker(getSvnWorkConfig());
-                            // sw.update(getSourcePath(), file);
+                            file = getFilePathFromString(buf);
+                            updateFiles.add(file);
                         }
-
                     }
                     catch (Exception ex)
                     {
@@ -210,7 +221,7 @@ public class FileLogWorker extends Thread
         }
     }
 
-    private String getFilePathFromString(String msg)
+    protected String getFilePathFromString(String msg)
     {
         String result = "";
         if (null != msg)
@@ -240,7 +251,7 @@ public class FileLogWorker extends Thread
         return _isLoop;
     }
 
-    private boolean renameLogPath() throws NullPointerException, SecurityException
+    protected boolean renameLogPath() throws NullPointerException, SecurityException
     {
         boolean result = false;
 
@@ -259,7 +270,7 @@ public class FileLogWorker extends Thread
         return result;
     }
 
-    private void deleteDoingLog() throws NullPointerException, SecurityException
+    protected void deleteDoingLog() throws NullPointerException, SecurityException
     {
         File fp = new File(getDoingLogPath());
         if (fp.exists())

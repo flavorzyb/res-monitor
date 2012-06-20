@@ -160,7 +160,7 @@ public class SvnWorker
         }
     }
 
-    public boolean update(String sourcePath, String[] filePaths) throws SVNException, NullPointerException, IOException, SecurityException, NoSuchAlgorithmException
+    public boolean update(String sourcePath, Vector<String> filePaths) throws SVNException, NullPointerException, IOException, SecurityException, NoSuchAlgorithmException
     {
         boolean result = false;
         // clean up workcopy
@@ -178,10 +178,10 @@ public class SvnWorker
         }
         
         int i = 0;
-        int len = filePaths.length;
+        int len = filePaths.size();
         for (i = 0; i < len; i++)
         {
-            addFile2SVN(sourcePath, filePaths[i]);
+            addFile2SVN(sourcePath, filePaths.get(i));
         }
 
         // 添加svn事件
