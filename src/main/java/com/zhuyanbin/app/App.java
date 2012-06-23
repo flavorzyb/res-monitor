@@ -1,11 +1,9 @@
 package com.zhuyanbin.app;
 
-
-
 /**
  * 启动程序
  */
-public class App 
+public class App
 {
     public static void main( String[] args )
     {
@@ -37,11 +35,6 @@ public class App
             fw.addWatch();
 
             flw.join();
-            //
-            // while (true)
-            // {
-            // Thread.sleep(10000);
-            // }
         }
         catch (Exception ex)
         {
