@@ -52,6 +52,11 @@ public class MyApp extends Thread
             {
                 flw.join();
             }
+
+            /*
+             * while (flw.isLoop()) { //
+             * ErrorLog.getInstance().write("...running"); sleep(1000); }
+             */
         }
         catch (Exception ex)
         {
