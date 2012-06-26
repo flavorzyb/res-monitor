@@ -21,6 +21,15 @@ public class App
             FileChecker.checkPathIsDirectory(config.getSourcePath());
             FileChecker.checkPathIsDirectory(config.getDestPath());
 
+            AppChecker appChecker = new AppChecker(config.getPidPath());
+            if (appChecker.hasRunning())
+            {
+                System.out.println("Application is running now.");
+                return;
+            }
+
+            appChecker.writePid2File();
+
             ErrorLog.getInstance().setLogPath(config.getErrorLogPath());
 
             // svn work config

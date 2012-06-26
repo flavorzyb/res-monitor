@@ -75,7 +75,7 @@ public class ConfigProxy
             }
             else if ("pidlog" == name)
             {
-                result.setErrorLogPath(nl.item(i).getAttributes().getNamedItem("path").getNodeValue());
+                result.setPidPath(nl.item(i).getAttributes().getNamedItem("path").getNodeValue());
             }
         }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="resource monitor config">
-<sourcepath path="/Users/flavor/resource/svn_work.bak"/>
-<destpath path="/Users/flavor/resource/svn_work"/>
+<sourcepath path="src/test/svn/source"/>
+<destpath path="src/test/svn/dest"/>
 <svn>
     <username param="yanbin"/>
     <password param="123456"/>
