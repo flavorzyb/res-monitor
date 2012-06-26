@@ -74,14 +74,6 @@
 			<scope>system</scope>
 			<systemPath>${project.build.Libs.loc}/jnotify-0.94.jar</systemPath>
 		</dependency>
-		
-		<dependency>
-            <groupId>org.tanukisoftware</groupId>
-            <artifactId>wrapper</artifactId>
-            <version>3.5.14</version>
-            <scope>system</scope>
-            <systemPath>${project.build.Libs.loc}/wrapper.jar</systemPath>
-        </dependency>
 
 		<dependency>
 			<groupId>org.easymock</groupId>
