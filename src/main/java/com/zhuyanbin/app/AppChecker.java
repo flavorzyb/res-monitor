@@ -84,6 +84,43 @@ public class AppChecker
         if (os.indexOf("Windows") >= 0)
         {
             cmd = "tasklist";
+            InputStream is = Runtime.getRuntime().exec(cmd).getInputStream();
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            String str = null;
+            String ss = null;
+            int i = 0;
+            int index = 30;
+            while (null != (str = br.readLine()))
+            {
+                try
+                {
+                	i++;
+                	if (3==i)
+                	{
+                		index = str.indexOf(" ", 28);
+                	}
+                	
+                	if ((i > 2) && str.length() > index)
+                	{
+                		ss = str.substring(27, index).trim();
+                		if (Long.parseLong(ss) == pid)
+                		{
+                			result = true;
+                			break;
+                		}
+                	}
+                }
+                catch (NumberFormatException ex)
+                {
+                }
+                catch (Exception ex)
+                {
+                    ex.printStackTrace();
+                }
+            }
+
+            br.close();
+            is.close();
         }
         else
         {
