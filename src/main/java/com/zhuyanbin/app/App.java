@@ -1,5 +1,6 @@
 package com.zhuyanbin.app;
 
+
 /**
  * 启动程序
  */
@@ -40,5 +41,16 @@ public class App
         {
             ErrorLog.getInstance().write(ex.getMessage());
         }
+    }
+
+    private static long getPID()
+    {
+        String processName = java.lang.management.ManagementFactory.getRuntimeMXBean().getName();
+        return Long.parseLong(processName.split("@")[0]);
+    }
+
+    private static boolean isRunning()
+    {
+        return false;
     }
 }

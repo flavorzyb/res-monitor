@@ -87,6 +87,7 @@ public class ConfigProxyTest extends TestCase
 		{
             conf = classRelection.load(xmlFile);
             assertTrue(conf instanceof Config);
+            conf = classRelection.load(xmlFile);
             checkConfig(conf);
 		}
 		catch(IOException ex)
@@ -141,6 +142,7 @@ public class ConfigProxyTest extends TestCase
         result.setLogPath("/data1/resmonitor/resmonitor.log");
         result.setDoingLogPath("/data1/resmonitor/resmonitor_doing.log");
         result.setErrorLogPath("/data1/resmonitor/resmonitor_error.log");
+        result.setPidPath("/data1/resmonitor/resmonitor.pid");
 
         assertEquals(result.getSourcePath(), conf.getSourcePath());
         assertEquals(result.getDestPath(), conf.getDestPath());
@@ -150,5 +152,6 @@ public class ConfigProxyTest extends TestCase
         assertEquals(result.getLogPath(), conf.getLogPath());
         assertEquals(result.getDoingLogPath(), conf.getDoingLogPath());
         assertEquals(result.getErrorLogPath(), conf.getErrorLogPath());
+        assertEquals(result.getPidPath(), conf.getPidPath());
     }
 }

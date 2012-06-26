@@ -266,6 +266,7 @@ public class SvnWorkerTest extends TestCase
 
         //
         createDir(sourcePath + "/ttt.txt");
+
         scm = EasyMock.createMockBuilder(SVNClientManager.class).addMockedMethod("getWCClient").addMockedMethod("getUpdateClient").addMockedMethod("getCommitClient").createMock();
 
         swclient = EasyMock.createMockBuilder(SVNWCClient.class).addMockedMethod("doCleanup", File.class).createMock();

@@ -21,13 +21,4 @@ public class FileChecker
             throw new Exception(fp.getAbsolutePath() + " is not a file.");
         }
     }
-
-    public static void checkPathcanExecute(String path) throws NullPointerException, SecurityException, Exception
-    {
-        File fp = new File(path);
-        if (!fp.canExecute())
-        {
-            throw new Exception(fp.getAbsolutePath() + " is not a file.");
-        }
-    }
 }

@@ -10,5 +10,6 @@
     <logpath path="../logs/resmonitor.log"/>
     <doinglogpath path="../logs/resmonitor_doing.log"/>
     <errorlog path="../logs/resmonitor_error.log"/>
+    <pidlog path="../logs/resmonitor.pid"/>
 </logs>
 </project>

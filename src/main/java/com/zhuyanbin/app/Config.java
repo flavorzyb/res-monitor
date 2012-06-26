@@ -14,6 +14,7 @@ public class Config
 	private String _logPath;
     private String _doingLogPath;
 	private String _errorLogPath;
+    private String _pidPath;
 
 	public Config()
 	{
@@ -88,4 +89,14 @@ public class Config
 	{
 		_errorLogPath = redoLogPath;
 	}
+
+    public String getPidPath()
+    {
+        return _pidPath;
+    }
+
+    public void setPidPath(String pidPath)
+    {
+        _pidPath = pidPath;
+    }
 }

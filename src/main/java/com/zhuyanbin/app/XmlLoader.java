@@ -14,10 +14,10 @@ public class XmlLoader
 	private String _xmlFile;
 	private Document _doc;
 	
-	public XmlLoader()
-	{
-	}
-	
+    public XmlLoader()
+    {
+    }
+
 	public XmlLoader(String xmlFile)
 	{
 		setXmlFilePath(xmlFile);

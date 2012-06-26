@@ -73,6 +73,10 @@ public class ConfigProxy
             {
                 result.setErrorLogPath(nl.item(i).getAttributes().getNamedItem("path").getNodeValue());
             }
+            else if ("pidlog" == name)
+            {
+                result.setErrorLogPath(nl.item(i).getAttributes().getNamedItem("path").getNodeValue());
+            }
         }
 
         return result;
