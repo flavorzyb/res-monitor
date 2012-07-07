@@ -12,6 +12,7 @@ public class Config
 	private String _userName;
 	private String _password;
 	private String _logPath;
+    private String _redoLogPath;
     private String _doingLogPath;
 	private String _errorLogPath;
     private String _pidPath;
@@ -78,6 +79,16 @@ public class Config
     public String getDoingLogPath()
     {
         return _doingLogPath;
+    }
+
+    public void setRedoLogPath(String logPath)
+    {
+        _redoLogPath = logPath;
+    }
+
+    public String getRedoLogPath()
+    {
+        return _redoLogPath;
     }
 
 	public String getErrorLogPath() 

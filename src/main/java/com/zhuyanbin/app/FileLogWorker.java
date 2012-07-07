@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Vector;
 
 public class FileLogWorker extends Thread
@@ -15,6 +17,7 @@ public class FileLogWorker extends Thread
     private final static int STATUS_IS_SLEEP = 1;
 
     private String           _logPath;
+    private String           _redologPath;
     private String           _doingLogPath;
     private String           _sourcePath;
     private SvnWorkConfig    _swc;
@@ -23,13 +26,24 @@ public class FileLogWorker extends Thread
     private int              _status         = STATUS_IS_SLEEP;
     private SvnWorker        _svnWorker;
 
-    public FileLogWorker(String logPath, String doingLogPath, String sourcePath, ErrorLog errorLog, SvnWorkConfig swc)
+    public FileLogWorker(String logPath, String doingLogPath, String redoLogPath, String sourcePath, ErrorLog errorLog, SvnWorkConfig swc)
     {
         setLogPath(logPath);
         setDoingLogPath(doingLogPath);
+        setRedoLogPath(redoLogPath);
         setSourcePath(sourcePath);
         setErrorLog(errorLog);
         setSvnWorkConfig(swc);
+    }
+
+    private void setRedoLogPath(String logPath)
+    {
+        _redologPath = logPath;
+    }
+
+    public String getRedoLogPath()
+    {
+        return _redologPath;
     }
 
     private void setLogPath(String logPath)
@@ -197,6 +211,7 @@ public class FileLogWorker extends Thread
                 if (renameLogPath())
                 {
                     setStatus(STATUS_IS_DOING);
+                    Vector<String> updateFiles = null;
                     try
                     {
                         fis = new FileInputStream(getDoingLogPath());
@@ -205,16 +220,20 @@ public class FileLogWorker extends Thread
 
                         String buf = null;
                         String file;
-                        Vector<String> updateFiles = new Vector<String>();
+                        updateFiles = new Vector<String>();
                         while (null != (buf = br.readLine()))
                         {
                             file = getFilePathFromString(buf);
-                            updateFiles.add(file);
+                            if (pathIsExists(getSourcePath() + "/" + file))
+                            {
+                                updateFiles.add(file);
+                            }
                         }
                         getSvnWorker().update(getSourcePath(), updateFiles);
                     }
                     catch (Exception ex)
                     {
+                        writeRedoLog(updateFiles);
                         throw ex;
                     }
                     finally
@@ -304,6 +323,12 @@ public class FileLogWorker extends Thread
         return result;
     }
 
+    protected boolean pathIsExists(String path)
+    {
+        File fp = new File(path);
+        return fp.exists();
+    }
+
     protected void deleteDoingLog() throws NullPointerException, SecurityException
     {
         File fp = new File(getDoingLogPath());
@@ -313,6 +338,41 @@ public class FileLogWorker extends Thread
         }
     }
 
+    protected void writeRedoLog(Vector<String> updateFiles)
+    {
+        if (null != updateFiles)
+        {
+           try
+           {
+                int len = updateFiles.size();
+                if (len > 0)
+                {
+                    FileOutputStream fos = new FileOutputStream(getRedoLogPath(), true);
+                    String file = null;
+                    Date dt = new Date();
+                    Timestamp ts = new Timestamp(dt.getTime());
+
+                    for (int i = 0; i < len; i++)
+                    {
+                        file = updateFiles.get(i);
+                        if (null != file)
+                        {
+                            String msg = ts + "|" + file + "\n";
+                            fos.write(msg.getBytes());
+                        }
+                    }
+
+                    fos.flush();
+                    fos.close();
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
+        }
+    }
+    
     public boolean isSleep()
     {
         return (getStatus() == STATUS_IS_SLEEP);

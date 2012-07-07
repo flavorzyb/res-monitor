@@ -143,6 +143,7 @@ public class ConfigProxyTest extends TestCase
         result.setDoingLogPath("/data1/resmonitor/resmonitor_doing.log");
         result.setErrorLogPath("/data1/resmonitor/resmonitor_error.log");
         result.setPidPath("/data1/resmonitor/resmonitor.pid");
+        result.setRedoLogPath("/data1/resmonitor/resmonitor_redo.log");
 
         assertEquals(result.getSourcePath(), conf.getSourcePath());
         assertEquals(result.getDestPath(), conf.getDestPath());
@@ -153,5 +154,6 @@ public class ConfigProxyTest extends TestCase
         assertEquals(result.getDoingLogPath(), conf.getDoingLogPath());
         assertEquals(result.getErrorLogPath(), conf.getErrorLogPath());
         assertEquals(result.getPidPath(), conf.getPidPath());
+        assertEquals(result.getRedoLogPath(), conf.getRedoLogPath());
     }
 }

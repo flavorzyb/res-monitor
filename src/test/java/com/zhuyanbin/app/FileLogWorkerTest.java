@@ -20,6 +20,7 @@ public class FileLogWorkerTest extends TestCase
 
     private final String        logPath      = "src/test/logs/work.log";
     private final String        doingLogPath = "src/test/logs/work_doing.log";
+    private final String         redoLogPath  = "src/test/logs/work_redo.log";
     private final String        sourcePath   = "src/test/svn/source";
     private final String        wcPath       = "src/test/svn/dest";
     private final String        userName     = "test";
@@ -33,7 +34,7 @@ public class FileLogWorkerTest extends TestCase
     {
         super.setUp();
         svnworker = EasyMock.createMockBuilder(SvnWorker.class).addMockedMethod("update", String.class, Vector.class).createMock();
-        classRelection = new FileLogWorker(logPath, doingLogPath, sourcePath, ErrorLog.getInstance(), swc);
+        classRelection = new FileLogWorker(logPath, doingLogPath, redoLogPath, sourcePath, ErrorLog.getInstance(), swc);
     }
 
     @Override
@@ -80,7 +81,7 @@ public class FileLogWorkerTest extends TestCase
         createFile(doingLogPath);
         createFile(logPath);
 
-        classRelection = EasyMock.createMockBuilder(FileLogWorker.class).withConstructor(logPath, doingLogPath, sourcePath, ErrorLog.getInstance(), swc).addMockedMethod("getSvnWorker").createMock();
+        classRelection = EasyMock.createMockBuilder(FileLogWorker.class).withConstructor(logPath, doingLogPath, redoLogPath, sourcePath, ErrorLog.getInstance(), swc).addMockedMethod("getSvnWorker").createMock();
         EasyMock.expect(classRelection.getSvnWorker()).andReturn(svnworker).anyTimes();
         EasyMock.expect(svnworker.update(EasyMock.anyObject(String.class), EasyMock.anyObject(updateFiles.getClass()))).andReturn(true).anyTimes();
 
@@ -104,7 +105,7 @@ public class FileLogWorkerTest extends TestCase
     {
         createFile(logPath);
 
-        classRelection = EasyMock.createMockBuilder(FileLogWorker.class).withConstructor(logPath, doingLogPath, sourcePath, ErrorLog.getInstance(), swc).addMockedMethod("getSvnWorker").createMock();
+        classRelection = EasyMock.createMockBuilder(FileLogWorker.class).withConstructor(logPath, doingLogPath, redoLogPath, sourcePath, ErrorLog.getInstance(), swc).addMockedMethod("getSvnWorker").createMock();
         EasyMock.expect(classRelection.getSvnWorker()).andReturn(svnworker).anyTimes();
         EasyMock.expect(svnworker.update(EasyMock.anyObject(String.class), EasyMock.anyObject(updateFiles.getClass()))).andReturn(true).anyTimes();
 
@@ -127,7 +128,7 @@ public class FileLogWorkerTest extends TestCase
     {
         createFile(logPath);
 
-        classRelection = EasyMock.createMockBuilder(FileLogWorker.class).withConstructor(logPath, doingLogPath, sourcePath, ErrorLog.getInstance(), swc).addMockedMethod("getSvnWorker").createMock();
+        classRelection = EasyMock.createMockBuilder(FileLogWorker.class).withConstructor(logPath, doingLogPath, redoLogPath, sourcePath, ErrorLog.getInstance(), swc).addMockedMethod("getSvnWorker").createMock();
         EasyMock.expect(classRelection.getSvnWorker()).andReturn(svnworker).anyTimes();
         EasyMock.expect(svnworker.update(EasyMock.anyObject(String.class), EasyMock.anyObject(updateFiles.getClass()))).andThrow(new IOException("throw a IOException when svnworker update"));
 

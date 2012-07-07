@@ -61,11 +61,11 @@ public class ConfigProxy
         for (int i = 0; i < len; i++)
         {
             name = nl.item(i).getNodeName();
-            if ("logpath" == name)
+            if ("log" == name)
             {
                 result.setLogPath(nl.item(i).getAttributes().getNamedItem("path").getNodeValue());
             }
-            else if ("doinglogpath" == name)
+            else if ("doinglog" == name)
             {
                 result.setDoingLogPath(nl.item(i).getAttributes().getNamedItem("path").getNodeValue());
             }
@@ -76,6 +76,10 @@ public class ConfigProxy
             else if ("pidlog" == name)
             {
                 result.setPidPath(nl.item(i).getAttributes().getNamedItem("path").getNodeValue());
+            }
+            else if ("redolog" == name)
+            {
+                result.setRedoLogPath(nl.item(i).getAttributes().getNamedItem("path").getNodeValue());
             }
         }
 

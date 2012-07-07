@@ -7,8 +7,9 @@
     <password param="password"/>
 </svn>
 <logs>
-    <logpath path="/data1/resmonitor/resmonitor.log"/>
-    <doinglogpath path="/data1/resmonitor/resmonitor_doing.log"/>
+    <log path="/data1/resmonitor/resmonitor.log"/>
+    <redolog path="/data1/resmonitor/resmonitor_redo.log"/>
+    <doinglog path="/data1/resmonitor/resmonitor_doing.log"/>
     <errorlog path="/data1/resmonitor/resmonitor_error.log"/>
     <pidlog path="/data1/resmonitor/resmonitor.pid"/>
 </logs>
