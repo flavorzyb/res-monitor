@@ -181,7 +181,10 @@ public class SvnWorker
         int len = filePaths.size();
         for (i = 0; i < len; i++)
         {
-            addFile2SVN(sourcePath, filePaths.get(i));
+            if (pathIsExists(sourcePath + "/" + filePaths.get(i)))
+            {
+                addFile2SVN(sourcePath, filePaths.get(i));
+            }
         }
 
         // 添加svn事件
@@ -206,6 +209,12 @@ public class SvnWorker
         result = doCommit(commitFilePaths);
 
         return result;
+    }
+
+    protected boolean pathIsExists(String path)
+    {
+        File fp = new File(path);
+        return fp.exists();
     }
 
     protected void copyFile(String sourcePath, String filePath) throws NullPointerException, IOException, SecurityException

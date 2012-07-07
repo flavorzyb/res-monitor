@@ -256,6 +256,7 @@ public class SvnWorkerTest extends TestCase
         EasyMock.replay(scclient);
 
         classRelection.setSVNClientManager(scm);
+        filePaths.add("asdfassdasdfasdfasdfasdfsdfasdfsd");
         classRelection.update(sourcePath, filePaths);
         EasyMock.verify(scm);
         EasyMock.verify(swclient);
