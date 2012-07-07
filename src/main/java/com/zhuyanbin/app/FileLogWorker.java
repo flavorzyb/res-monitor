@@ -198,64 +198,76 @@ public class FileLogWorker extends Thread
         return _svnWorker;
     }
 
-    @Override
-    public void run() throws IllegalThreadStateException
+    public void work(String logPath) throws Exception
     {
         FileInputStream fis = null;
         InputStreamReader isr = null;
         BufferedReader br = null;
+
+        setStatus(STATUS_IS_DOING);
+        Vector<String> updateFiles = null;
+        try
+        {
+            fis = new FileInputStream(logPath);
+            isr = new InputStreamReader(fis);
+            br = new BufferedReader(isr);
+
+            String buf = null;
+            String file;
+            updateFiles = new Vector<String>();
+            while (null != (buf = br.readLine()))
+            {
+                file = getFilePathFromString(buf);
+                if (pathIsExists(getSourcePath() + "/" + file))
+                {
+                    updateFiles.add(file);
+                }
+            }
+            getSvnWorker().update(getSourcePath(), updateFiles);
+        }
+        catch (Exception ex)
+        {
+            writeRedoLog(updateFiles);
+            throw ex;
+        }
+        finally
+        {
+            if (null != fis)
+            {
+                fis.close();
+                fis = null;
+            }
+
+            if (null != isr)
+            {
+                isr.close();
+                isr = null;
+            }
+
+            if (null != br)
+            {
+                br.close();
+                br = null;
+            }
+        }
+    }
+
+    @Override
+    public void run() throws IllegalThreadStateException
+    {
         while (isLoop())
         {
             try
             {
+                // 先做redo log
+                if (renameRedoLogPath())
+                {
+                    work(getRedoLogPath());
+                }
+
                 if (renameLogPath())
                 {
-                    setStatus(STATUS_IS_DOING);
-                    Vector<String> updateFiles = null;
-                    try
-                    {
-                        fis = new FileInputStream(getDoingLogPath());
-                        isr = new InputStreamReader(fis);
-                        br = new BufferedReader(isr);
-
-                        String buf = null;
-                        String file;
-                        updateFiles = new Vector<String>();
-                        while (null != (buf = br.readLine()))
-                        {
-                            file = getFilePathFromString(buf);
-                            if (pathIsExists(getSourcePath() + "/" + file))
-                            {
-                                updateFiles.add(file);
-                            }
-                        }
-                        getSvnWorker().update(getSourcePath(), updateFiles);
-                    }
-                    catch (Exception ex)
-                    {
-                        writeRedoLog(updateFiles);
-                        throw ex;
-                    }
-                    finally
-                    {
-                        if (null != fis)
-                        {
-                            fis.close();
-                            fis = null;
-                        }
-
-                        if (null != isr)
-                        {
-                            isr.close();
-                            isr = null;
-                        }
-
-                        if (null != br)
-                        {
-                            br.close();
-                            br = null;
-                        }
-                    }
+                    work(getDoingLogPath());
                 }
                 else
                 {
@@ -304,7 +316,7 @@ public class FileLogWorker extends Thread
         return _isLoop;
     }
 
-    protected boolean renameLogPath() throws NullPointerException, SecurityException
+    protected boolean renamePath(String logPath) throws NullPointerException, SecurityException
     {
         boolean result = false;
 
@@ -314,13 +326,23 @@ public class FileLogWorker extends Thread
             return false;
         }
 
-        File fp = new File(getLogPath());
+        File fp = new File(logPath);
         if (fp.isFile())
         {
             result = fp.renameTo(doFp);
         }
 
         return result;
+    }
+
+    protected boolean renameLogPath() throws NullPointerException, SecurityException
+    {
+        return renamePath(getLogPath());
+    }
+    
+    protected boolean renameRedoLogPath() throws NullPointerException, SecurityException
+    {
+        return renamePath(getRedoLogPath());
     }
 
     protected boolean pathIsExists(String path)
