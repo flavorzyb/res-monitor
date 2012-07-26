@@ -147,6 +147,31 @@ public class FileLogWorker extends Thread
                     fos.write(buff, 0, len);
                 }
             }
+
+            if (null != inBis)
+            {
+                inBis.close();
+                inBis = null;
+            }
+
+            if (null != in)
+            {
+                in.close();
+                in = null;
+            }
+
+            if (null != fos)
+            {
+                fos.flush();
+                fos.close();
+                fos = null;
+            }
+
+            if (null != fp)
+            {
+                fp.delete();
+                fp = null;
+            }
         }
         catch (Exception ex)
         {
@@ -224,6 +249,24 @@ public class FileLogWorker extends Thread
                 }
             }
             getSvnWorker().update(getSourcePath(), updateFiles);
+
+            if (null != fis)
+            {
+                fis.close();
+                fis = null;
+            }
+
+            if (null != isr)
+            {
+                isr.close();
+                isr = null;
+            }
+
+            if (null != br)
+            {
+                br.close();
+                br = null;
+            }
         }
         catch (Exception ex)
         {
