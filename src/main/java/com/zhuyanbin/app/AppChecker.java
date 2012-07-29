@@ -133,7 +133,7 @@ public class AppChecker
                 ss = str.split("\\s");
                 try
                 {
-                    if ((ss.length > 2) && (ss[1].length() > 0) && (Long.parseLong(ss[1]) == pid))
+                    if ((ss.length > 2) && (ss[0].length() > 0) && (Long.parseLong(ss[0]) == pid))
                     {
                         result = true;
                         break;

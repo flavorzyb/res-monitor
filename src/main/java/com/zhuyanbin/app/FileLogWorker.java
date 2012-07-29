@@ -175,6 +175,7 @@ public class FileLogWorker extends Thread
         }
         catch (Exception ex)
         {
+            ex.printStackTrace();
             getErrorLog().write(ex.getMessage());
         }
         finally
@@ -320,6 +321,7 @@ public class FileLogWorker extends Thread
             }
             catch (Exception ex)
             {
+                ex.printStackTrace();
                 getErrorLog().write(ex.getMessage());
             }
             finally

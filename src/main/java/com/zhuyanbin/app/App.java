@@ -48,18 +48,8 @@ public class App
         }
         catch (Exception ex)
         {
+            ex.printStackTrace();
             ErrorLog.getInstance().write(ex.getMessage());
         }
-    }
-
-    private static long getPID()
-    {
-        String processName = java.lang.management.ManagementFactory.getRuntimeMXBean().getName();
-        return Long.parseLong(processName.split("@")[0]);
-    }
-
-    private static boolean isRunning()
-    {
-        return false;
     }
 }
