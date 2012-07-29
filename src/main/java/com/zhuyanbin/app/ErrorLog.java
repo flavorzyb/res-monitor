@@ -1,8 +1,5 @@
 package com.zhuyanbin.app;
 
-import java.io.FileOutputStream;
-import java.sql.Timestamp;
-import java.util.Date;
 
 public class ErrorLog
 {
@@ -35,20 +32,6 @@ public class ErrorLog
 
     public void write(String str)
     {
-        try
-        {
-            System.out.println(str);
-            Date dt = new Date();
-            Timestamp ts = new Timestamp(dt.getTime());
-            String msg = ts + "|" + str + "\n";
-            FileOutputStream fos = new FileOutputStream(getLogPath(), true);
-            fos.write(msg.getBytes());
-            fos.flush();
-            fos.close();
-        }
-        catch (Exception ex)
-        {
-            System.out.println(ex.getMessage());
-        }
+        Loger.write(getLogPath(), str);
     }
 }
