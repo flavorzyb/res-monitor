@@ -133,10 +133,28 @@ public class AppChecker
                 ss = str.split("\\s");
                 try
                 {
-                    if ((ss.length > 2) && (ss[0].length() > 0) && (Long.parseLong(ss[0]) == pid))
+                    if (ss.length > 2)
                     {
-                        result = true;
-                        break;
+                        long checkPid = 0l;
+
+                        for (int i = 0; i < 2; i++)
+                        {
+                            if (ss[i].length() > 0)
+                            {
+                                checkPid = Long.parseLong(ss[i]);
+                                break;
+                            }
+                        }
+
+                        if (checkPid > 0)
+                        {
+                            if (checkPid == pid)
+                            {
+                                result = true;
+                            }
+
+                            break;
+                        }
                     }
                 }
                 catch (NumberFormatException ex)
