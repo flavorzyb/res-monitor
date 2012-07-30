@@ -60,12 +60,14 @@ public class FullSync
         boolean result = false;
         Date d = new Date();
         long currTime = d.getTime();
+
         if (isNeedRsync(currTime))
         {
             setLastRunTime(currTime);
             work(getSourcePath());
             result = true;
         }
+
         return result;
     }
 

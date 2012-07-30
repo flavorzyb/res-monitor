@@ -28,6 +28,7 @@ public class SvnWorkerTest extends TestCase
     private SvnWorker classRelection;
     private final String        sourcePath   = "src/test/svn/source";
     private final String        workCopyPath = "src/test/svn/dest";
+    private final String        redoLogPath  = "src/test/logs/redo.log";
     private final String        userName     = "test";
     private final String        password     = "123456";
     private final SvnWorkConfig swc          = new SvnWorkConfig(workCopyPath, userName, password);
@@ -39,7 +40,7 @@ public class SvnWorkerTest extends TestCase
         super.setUp();
         deleteFile(workCopyPath);
         createDir(workCopyPath);
-        classRelection = new SvnWorker(swc);
+        classRelection = new SvnWorker(swc, redoLogPath);
     }
 
     @Override

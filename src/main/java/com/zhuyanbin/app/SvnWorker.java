@@ -22,10 +22,12 @@ public class SvnWorker
     private SVNClientManager _scm;
     private SvnWorkConfig    _swc;
     private Vector<SvnItem>  _item;
+    private String _redoLogPath;
 
-    public SvnWorker(SvnWorkConfig swc)
+    public SvnWorker(SvnWorkConfig swc, String redoLogPath)
     {
         setSvnWorkConfig(swc);
+        setRedoLogPath(redoLogPath);
     }
     
     private void setSvnWorkConfig(SvnWorkConfig swc)
@@ -36,6 +38,16 @@ public class SvnWorker
     public SvnWorkConfig getSvnWorkConfig()
     {
         return _swc;
+    }
+    
+    private void setRedoLogPath(String path)
+    {
+        _redoLogPath = path;
+    }
+    
+    public String getRedoLogPath()
+    {
+        return _redoLogPath;
     }
 
     public SVNClientManager getSVNClientManager()
@@ -219,25 +231,46 @@ public class SvnWorker
 
     protected void copyFile(String sourcePath, String filePath) throws NullPointerException, IOException, SecurityException
     {
-        FileInputStream sourceFis = new FileInputStream(new File(sourcePath + "/" + filePath));
-        BufferedInputStream sourceBis = new BufferedInputStream(sourceFis);
-
-        FileOutputStream destFos = new FileOutputStream(new File(getSvnWorkConfig().getWorkCopyPath() + "/" + filePath));
-        BufferedOutputStream destBos = new BufferedOutputStream(destFos);
-
-        byte[] b = new byte[1024 * 5];
-        int len = 0;
-
-        while (-1 != (len = sourceBis.read(b)))
+        try
         {
-            destBos.write(b, 0, len);
+            FileInputStream sourceFis = new FileInputStream(new File(sourcePath + "/" + filePath));
+            BufferedInputStream sourceBis = new BufferedInputStream(sourceFis);
+
+            FileOutputStream destFos = new FileOutputStream(new File(getSvnWorkConfig().getWorkCopyPath() + "/" + filePath));
+            BufferedOutputStream destBos = new BufferedOutputStream(destFos);
+
+            byte[] b = new byte[1024 * 5];
+            int len = 0;
+
+            while (-1 != (len = sourceBis.read(b)))
+            {
+                destBos.write(b, 0, len);
+            }
+
+            destBos.flush();
+
+            destBos.close();
+            destFos.close();
+            sourceBis.close();
+            sourceFis.close();
         }
-
-        destBos.flush();
-
-        destBos.close();
-        destFos.close();
-        sourceBis.close();
-        sourceFis.close();
+        catch (NullPointerException ex)
+        {
+            System.out.println("filePath==" + filePath);
+            Loger.write(getRedoLogPath(), filePath);
+            throw ex;
+        }
+        catch (IOException ex)
+        {
+            System.out.println("filePath==" + filePath);
+            Loger.write(getRedoLogPath(), filePath);
+            throw ex;
+        }
+        catch (SecurityException ex)
+        {
+            System.out.println("filePath==" + filePath);
+            Loger.write(getRedoLogPath(), filePath);
+            throw ex;
+        }
     }
 }

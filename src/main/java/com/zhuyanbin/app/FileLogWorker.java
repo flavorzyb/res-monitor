@@ -6,8 +6,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.Vector;
 
 public class FileLogWorker extends Thread
@@ -218,7 +216,7 @@ public class FileLogWorker extends Thread
     {
         if (null == _svnWorker)
         {
-            _svnWorker = new SvnWorker(getSvnWorkConfig());
+            _svnWorker = new SvnWorker(getSvnWorkConfig(), getRedoLogPath());
         }
 
         return _svnWorker;
@@ -299,6 +297,7 @@ public class FileLogWorker extends Thread
     @Override
     public void run() throws IllegalThreadStateException
     {
+        FullSync fs = new FullSync(getSvnWorkConfig().getWorkCopyPath(), getSourcePath(), getLogPath());
         while (isLoop())
         {
             try
@@ -308,6 +307,9 @@ public class FileLogWorker extends Thread
                 {
                     work(getRedoLogPath());
                 }
+
+                // 做全量同步
+                fs.rsync();
 
                 if (renameLogPath())
                 {
@@ -409,33 +411,19 @@ public class FileLogWorker extends Thread
     {
         if (null != updateFiles)
         {
-           try
-           {
-                int len = updateFiles.size();
-                if (len > 0)
-                {
-                    FileOutputStream fos = new FileOutputStream(getRedoLogPath(), true);
-                    String file = null;
-                    Date dt = new Date();
-                    Timestamp ts = new Timestamp(dt.getTime());
-
-                    for (int i = 0; i < len; i++)
-                    {
-                        file = updateFiles.get(i);
-                        if (null != file)
-                        {
-                            String msg = ts + "|" + file + "\n";
-                            fos.write(msg.getBytes());
-                        }
-                    }
-
-                    fos.flush();
-                    fos.close();
-                }
-            }
-            catch (Exception ex)
+            int len = updateFiles.size();
+            if (len > 0)
             {
-                ex.printStackTrace();
+                String file = null;
+
+                for (int i = 0; i < len; i++)
+                {
+                    file = updateFiles.get(i);
+                    if (null != file)
+                    {
+                        Loger.write(getRedoLogPath(), file);
+                    }
+                }
             }
         }
     }
