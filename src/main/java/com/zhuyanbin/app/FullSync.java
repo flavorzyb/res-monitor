@@ -1,9 +1,8 @@
 package com.zhuyanbin.app;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.File;
 import java.io.IOException;
-import java.sql.Timestamp;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
 public class FullSync
@@ -63,12 +62,57 @@ public class FullSync
         long currTime = d.getTime();
         if (isNeedRsync(currTime))
         {
-
             setLastRunTime(currTime);
+            work(getSourcePath());
             result = true;
         }
-
         return result;
+    }
+
+    protected void work(String path)
+    {
+        File fp = new File(path);
+        if (fp.isDirectory())
+        {
+            File[] files = fp.listFiles();
+            if (null != files)
+            {
+                int len = files.length;
+                for (int i = 0; i < len; i++)
+                {
+                    if (files[i].isDirectory())
+                    {
+                        work(files[i].getPath());
+                    }
+                    else
+                    {
+                        int sourceLen = getSourcePath().length();
+                        int fLen = files[i].getPath().length();
+                        if (fLen > sourceLen)
+                        {
+                            String cPath = files[i].getPath().substring(sourceLen + 1);
+                            try
+                            {
+                                if (!Md5CheckSum.md5StringIsSame(getSourcePath() + "/" + cPath, getWorkCopyPath() + "/" + cPath))
+                                {
+                                    writeLog(cPath);
+                                }
+                            }
+                            catch (NoSuchAlgorithmException ex)
+                            {
+                                ex.printStackTrace();
+                            }
+                            catch (IOException ex)
+                            {
+                                ex.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        fp = null;
     }
 
     public boolean isNeedRsync(long ctime)
@@ -80,35 +124,9 @@ public class FullSync
     {
         return _lastRunTime;
     }
-
-    protected void writeLog(String rootPath, String newName)
+    
+    protected void writeLog(String fileName)
     {
-        try
-        {
-            Date dt = new Date();
-            Timestamp ts = new Timestamp(dt.getTime());
-            String msg = ts + "|" + newName + "\n";
-            writeFile(getLogPath(), msg);
-        }
-        catch (FileNotFoundException ex)
-        {
-            System.out.println(ex.getMessage());
-        }
-        catch (SecurityException ex)
-        {
-            System.out.println(ex.getMessage());
-        }
-        catch (IOException ex)
-        {
-            System.out.println(ex.getMessage());
-        }
-    }
-
-    protected void writeFile(String filePath, String msg) throws FileNotFoundException, SecurityException, IOException
-    {
-        FileOutputStream fos = new FileOutputStream(filePath, true);
-        fos.write(msg.getBytes());
-        fos.flush();
-        fos.close();
+        Loger.write(getLogPath(), fileName);
     }
 }

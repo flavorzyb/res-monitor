@@ -36,7 +36,30 @@ public class Md5CheckSum
 
     public static boolean md5StringIsSame(String sourceFilePath, String destFilePath) throws IOException, NoSuchAlgorithmException
     {
+        if (!(isFile(sourceFilePath) && isFile(destFilePath)))
+        {
+            return false;
+        }
+
         return (getFileMd5(sourceFilePath).equals(getFileMd5(destFilePath)));
+    }
+
+    private static boolean isFile(String path)
+    {
+        boolean result = false;
+        try
+        {
+            File fp = new File(path);
+            result = fp.isFile();
+        }
+        catch (NullPointerException ex)
+        {
+        }
+        catch (SecurityException ex)
+        {
+        }
+
+        return result;
     }
 
     private static String bufferToHex(byte bytes[])

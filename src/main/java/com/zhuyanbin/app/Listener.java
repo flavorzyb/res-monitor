@@ -1,8 +1,5 @@
 package com.zhuyanbin.app;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -50,34 +47,16 @@ public class Listener implements JNotifyListener
         writeLog(rootPath, name);
     }
     
-    protected void writeFile(String filePath, String msg) throws FileNotFoundException, SecurityException, IOException
+    protected void writeFile(String filePath, String msg)
     {
-        FileOutputStream fos = new FileOutputStream(filePath, true);
-        fos.write(msg.getBytes());
-        fos.flush();
-        fos.close();
+        Loger.write(filePath, msg);
     }
 
     protected void writeLog(String rootPath, String newName)
     {
-        try
-        {
-            Date dt = new Date();
-            Timestamp ts = new Timestamp(dt.getTime());
-            String msg = ts + "|" + newName + "\n";
-            writeFile(getLogFile(), msg);
-        }
-        catch (FileNotFoundException ex)
-        {
-            System.out.println(ex.getMessage());
-        }
-        catch (SecurityException ex)
-        {
-            System.out.println(ex.getMessage());
-        }
-        catch (IOException ex)
-        {
-            System.out.println(ex.getMessage());
-        }
+        Date dt = new Date();
+        Timestamp ts = new Timestamp(dt.getTime());
+        String msg = ts + "|" + newName + "\n";
+        writeFile(getLogFile(), msg);
     }
 }
