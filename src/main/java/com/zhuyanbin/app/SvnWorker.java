@@ -236,7 +236,8 @@ public class SvnWorker
             FileInputStream sourceFis = new FileInputStream(new File(sourcePath + "/" + filePath));
             BufferedInputStream sourceBis = new BufferedInputStream(sourceFis);
 
-            FileOutputStream destFos = new FileOutputStream(new File(getSvnWorkConfig().getWorkCopyPath() + "/" + filePath));
+            File fp = new File(getSvnWorkConfig().getWorkCopyPath() + "/" + filePath);
+            FileOutputStream destFos = new FileOutputStream(fp);
             BufferedOutputStream destBos = new BufferedOutputStream(destFos);
 
             byte[] b = new byte[1024 * 5];

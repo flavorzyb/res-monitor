@@ -1,10 +1,9 @@
 package com.zhuyanbin.app;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -28,11 +27,16 @@ public class Md5CheckSum
     {
         File fp = new File(filePath);
         FileInputStream in = new FileInputStream(fp);
-        FileChannel ch = in.getChannel();
-        MappedByteBuffer byteBuffer = ch.map(FileChannel.MapMode.READ_ONLY, 0, fp.length());
-        getMessageDigest().update(byteBuffer);
-        ch.close();
-        ch = null;
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream((int) fp.length());
+        int len = 0;
+        byte[] cache = new byte[1048576];
+        while (-1 != (len = in.read(cache)))
+        {
+            baos.write(cache, 0, len);
+        }
+
+        getMessageDigest().update(baos.toByteArray());
         in.close();
         in = null;
         fp = null;
