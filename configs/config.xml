@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="resource monitor config">
-<sourcepath path="../src/test/svn/source"/>
-<destpath path="../src/test/svn/dest"/>
+<sourcepath path="src/test/svn/source"/>
+<destpath path="src/test/svn/dest"/>
 <svn>
-    <username param="yanbin"/>
-    <password param="123456"/>
+    <username param="resuser"/>
+    <password param="798798"/>
 </svn>
 <logs>
-    <logpath path="../logs/resmonitor.log"/>
-    <doinglogpath path="../logs/resmonitor_doing.log"/>
-    <errorlog path="../logs/resmonitor_error.log"/>
-    <pidlog path="../logs/resmonitor.pid"/>
+    <log path="logs/resmonitor.log"/>
+    <doinglog path="logs/resmonitor_doing.log"/>
+    <redolog path="logs/resmonitor_redo.log"/>
+    <errorlog path="logs/resmonitor_error.log"/>
+    <pidlog path="logs/resmonitor.pid"/>
 </logs>
 </project>

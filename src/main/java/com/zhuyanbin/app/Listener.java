@@ -1,8 +1,5 @@
 package com.zhuyanbin.app;
 
-import java.sql.Timestamp;
-import java.util.Date;
-
 import net.contentobjects.jnotify.JNotifyListener;
 
 public class Listener implements JNotifyListener
@@ -47,16 +44,8 @@ public class Listener implements JNotifyListener
         writeLog(rootPath, name);
     }
     
-    protected void writeFile(String filePath, String msg)
-    {
-        Loger.write(filePath, msg);
-    }
-
     protected void writeLog(String rootPath, String newName)
     {
-        Date dt = new Date();
-        Timestamp ts = new Timestamp(dt.getTime());
-        String msg = ts + "|" + newName + "\n";
-        writeFile(getLogFile(), msg);
+        Loger.write(getLogFile(), newName);
     }
 }
