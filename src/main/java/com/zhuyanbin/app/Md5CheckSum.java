@@ -31,6 +31,11 @@ public class Md5CheckSum
         FileChannel ch = in.getChannel();
         MappedByteBuffer byteBuffer = ch.map(FileChannel.MapMode.READ_ONLY, 0, fp.length());
         getMessageDigest().update(byteBuffer);
+        ch.close();
+        ch = null;
+        in.close();
+        in = null;
+        fp = null;
         return bufferToHex(getMessageDigest().digest());
     }
 
@@ -47,16 +52,28 @@ public class Md5CheckSum
     private static boolean isFile(String path)
     {
         boolean result = false;
+        File fp = null;
         try
         {
-            File fp = new File(path);
+            fp = new File(path);
             result = fp.isFile();
+            if (null != fp)
+            {
+                fp = null;
+            }
         }
         catch (NullPointerException ex)
         {
         }
         catch (SecurityException ex)
         {
+        }
+        finally
+        {
+            if (null != fp)
+            {
+                fp = null;
+            }
         }
 
         return result;

@@ -14,6 +14,7 @@ import org.tmatesoft.svn.core.SVNDepth;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
+import org.tmatesoft.svn.core.wc.SVNRevision;
 import org.tmatesoft.svn.core.wc.SVNWCUtil;
 
 public class SvnWorker
@@ -74,15 +75,12 @@ public class SvnWorker
 
     private void doCleanUp() throws SVNException, NullPointerException
     {
-        // getSVNClientManager().getWCClient().doCleanup(new
-        // File(getSvnWorkConfig().getWorkCopyPath()));
+        getSVNClientManager().getWCClient().doCleanup(new File(getSvnWorkConfig().getWorkCopyPath()));
     }
 
     private void doUpdate() throws SVNException, NullPointerException
     {
-        // getSVNClientManager().getUpdateClient().doUpdate(new
-        // File(getSvnWorkConfig().getWorkCopyPath()), SVNRevision.HEAD,
-        // SVNDepth.INFINITY, true, true);
+        getSVNClientManager().getUpdateClient().doUpdate(new File(getSvnWorkConfig().getWorkCopyPath()), SVNRevision.HEAD, SVNDepth.INFINITY, true, true);
     }
 
     private boolean doCommit(String[] filePaths) throws SVNException, NullPointerException
