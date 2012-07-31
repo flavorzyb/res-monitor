@@ -232,6 +232,12 @@ public class FileLogWorker extends Thread
         Vector<String> updateFiles = null;
         try
         {
+            File fp = new File(logPath);
+            if (!fp.isFile())
+            {
+                return;
+            }
+
             fis = new FileInputStream(logPath);
             isr = new InputStreamReader(fis);
             br = new BufferedReader(isr);
